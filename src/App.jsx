@@ -8,7 +8,7 @@ import Home from "./pages/Home";
 import Footer from "./components/Footer";
 import Movies from "./pages/AllMoviesPage";
 import NavBar from "./components/NavBar";
-import MoviePage from "./pages/moviePage";
+import MoviePage from "./pages/MoviePage";
 import ShowPage from "./pages/ShowPage";
 import Athentication from "./pages/Athentication";
 import Error404 from "./pages/Error404";
