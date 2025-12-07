@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
 import MovieCard3 from "../components/MovieCard3";
-import { CenimaContext } from "../context/cenimaContext";
+import { CenimaContext } from "../context/CenimaContext";
 import { API_KEY } from "../context/api";
 
 function Movies() {

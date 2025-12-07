@@ -7,7 +7,7 @@ import { API_KEY } from "../context/api";
 import { useState, useEffect, useContext } from "react";
 import EpisodeCard from "../components/EpisodeCard";
 import { IoIosArrowForward } from "react-icons/io";
-import { CenimaContext } from "../context/cenimaContext";
+import { CenimaContext } from "../context/CenimaContext";
 
 function ShowPage() {
   const [showData, setShowData] = useState(null);

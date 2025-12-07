@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { CenimaContext } from "../context/cenimaContext";
+import { CenimaContext } from "../context/CenimaContext";
 import { trendGenres } from "../assets/trendGenres";
 import MovieCard1 from "../components/MovieCard1";
 import MovieCard2 from "../components/MovieCard2";

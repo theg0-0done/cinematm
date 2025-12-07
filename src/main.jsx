@@ -7,7 +7,7 @@ import "./styles/laptopStyles.css";
 import "./styles/desktop.styles.css";
 import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
-import { CenimaProvider } from "./context/cenimaContext.jsx";
+import { CenimaProvider } from "./context/CenimaContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

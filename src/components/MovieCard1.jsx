@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { CenimaContext } from "../context/cenimaContext";
+import { CenimaContext } from "../context/CenimaContext";
 import { FaStar } from "react-icons/fa";
 
 function MovieCard1({ movie }) {

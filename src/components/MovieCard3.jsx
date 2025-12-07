@@ -2,7 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import { MdBookmark } from "react-icons/md";
 import { useContext } from "react";
-import { CenimaContext } from "../context/cenimaContext";
+import { CenimaContext } from "../context/CenimaContext";
 
 function MovieCard3({ movie }) {
   const { mediaType } = useParams();

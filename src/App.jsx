@@ -11,6 +11,7 @@ import NavBar from "./components/NavBar";
 import MoviePage from "./pages/moviePage";
 import ShowPage from "./pages/ShowPage";
 import Athentication from "./pages/Athentication";
+import Error404 from "./pages/Error404";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/movie/:id" element={<MoviePage />} />
         <Route path="/tv/:id" element={<ShowPage />} />
         <Route path="/athenticate/:method" element={<Athentication />} />
+        <Route path="*" element={<Error404 />}/>
       </Routes>
       <Footer />
     </>

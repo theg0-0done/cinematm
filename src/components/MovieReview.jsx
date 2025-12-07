@@ -3,7 +3,7 @@ import { BiMoviePlay } from "react-icons/bi";
 import ReactStars from "react-stars";
 import { allGenres } from "../assets/allGenres";
 import { useContext } from "react";
-import { CenimaContext } from "../context/cenimaContext";
+import { CenimaContext } from "../context/CenimaContext";
 import { Link } from "react-router-dom";
 import { IoIosArrowForward } from "react-icons/io";
 

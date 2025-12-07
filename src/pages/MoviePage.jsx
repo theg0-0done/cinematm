@@ -5,7 +5,7 @@ import { TbFolderPlus } from "react-icons/tb";
 import MovieCard1 from "../components/MovieCard1";
 import { useContext, useEffect, useState } from "react";
 import { API_KEY } from "../context/api";
-import { CenimaContext } from "../context/cenimaContext";
+import { CenimaContext } from "../context/CenimaContext";
 
 function MoviePage() {
   const [movieData, setMovieData] = useState(null);

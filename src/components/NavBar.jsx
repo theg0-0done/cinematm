@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { CenimaContext } from "../context/cenimaContext";
+import { CenimaContext } from "../context/CenimaContext";
 import { Link } from "react-router-dom";
 
 function NavBar() {

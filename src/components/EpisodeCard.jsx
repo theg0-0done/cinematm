@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { CenimaContext } from "../context/cenimaContext";
+import { CenimaContext } from "../context/CenimaContext";
 import ReactStars from "react-stars";
 
 function EpisodeCard({ ep }) {
