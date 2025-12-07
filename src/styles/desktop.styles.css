@@ -1,0 +1,44 @@
+@media (min-width: 1280px) {
+    .trend-movie-poster {
+        width: 12vw;
+    }
+
+    .trend-genres {
+        gap: 4rem;
+        padding: 4rem;
+    }
+
+    .genre {
+        width: 20vw;
+        height: 20vh;
+    }
+
+    .upcoming-movie img {
+        width: 32vw;
+    }
+
+    .footer-logo {
+        width: 40%;
+    }
+
+    .quicktab-container,
+    .download-container {
+        width: 30%;
+    }
+
+    .all-movie {
+        width: 12vw;
+    }
+
+    .movie-page-background {
+        height: 96vh;
+    }
+
+    .review {
+        flex: 0 0 88%;
+    }
+
+    .all-movies-header {
+        padding-inline: 4rem;
+    }
+}

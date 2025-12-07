@@ -1,0 +1,61 @@
+import { Link, useParams } from "react-router-dom";
+import { FaStar } from "react-icons/fa";
+import { MdBookmark } from "react-icons/md";
+import { useContext } from "react";
+import { CenimaContext } from "../context/cenimaContext";
+
+function MovieCard3({ movie }) {
+  const { mediaType } = useParams();
+  const { setWatchlist } = useContext(CenimaContext);
+
+  return (
+    movie.poster_path && (
+      <div className="all-movie">
+        <div style={{ position: "relative" }}>
+          {mediaType === "watchlist" && (
+            <div
+              className="rating"
+              style={{
+                right: "4px",
+                top: "4px",
+                padding: "4px",
+                cursor: "pointer",
+              }}
+              title="Remove from watchlist"
+              onClick={() =>
+                setWatchlist((prev) => prev.filter((m) => m !== movie))
+              }
+            >
+              <MdBookmark color="white" size={22} />
+            </div>
+          )}
+          <Link
+            to={`/${movie.media_type}/${movie.id}`}
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          >
+            <img
+              className="all-movie-poster"
+              src={`https://image.tmdb.org/t/p/w1280${movie.poster_path}`}
+              alt=""
+            />
+          </Link>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <p>{movie.title || movie.name}</p>
+          <p style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            {(movie.vote_average / 2).toFixed(1)}{" "}
+            <FaStar color="yellow" size={18} />{" "}
+          </p>
+        </div>
+      </div>
+    )
+  );
+}
+
+export default MovieCard3;
