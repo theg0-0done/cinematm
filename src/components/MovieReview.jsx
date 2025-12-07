@@ -1,14 +1,13 @@
 import { TbFolderPlus } from "react-icons/tb";
 import { BiMoviePlay } from "react-icons/bi";
 import ReactStars from "react-stars";
-import { allGenres } from "../assets/allGenres";
 import { useContext } from "react";
 import { CenimaContext } from "../context/CenimaContext";
 import { Link } from "react-router-dom";
 import { IoIosArrowForward } from "react-icons/io";
 
 function MovieReview({ movie }) {
-  const { setWatchlist } = useContext(CenimaContext);
+  const { setWatchlist, genres } = useContext(CenimaContext);
   return (
     movie.v_backdrop && (
       <div
@@ -32,7 +31,7 @@ function MovieReview({ movie }) {
             <h1>{movie.title || movie.name}</h1>
             <p className="movie-details-overview">{movie.overview}</p>
             <div className="genres-container">
-              {allGenres
+              {genres
                 .filter((genre) => movie.genre_ids.includes(genre.id))
                 .map((g) => (
                   <button key={g.id}>{g.name}</button>

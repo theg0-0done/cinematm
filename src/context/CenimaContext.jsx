@@ -3,9 +3,9 @@ import {
   useEffect,
   useState,
   useRef,
-  useEffectEvent,
 } from "react";
 import { API_KEY } from "./api";
+import { useParams } from "react-router-dom";
 
 export const CenimaContext = createContext();
 
@@ -22,8 +22,11 @@ export function CenimaProvider({ children }) {
   const [inCinema, setInCinema] = useState([]);
   const [upComing, setUpComing] = useState([]);
   const [watchlist, setWatchlist] = useState([]);
+  const [genres, setGenres] = useState([]);
+  const [languages, setLanguages] = useState([]);
 
   const containerRef = useRef(null);
+  const {mediaType} = useParams()
 
   useEffect(() => {
     const fetchTrendingActors = async () => {
@@ -298,6 +301,40 @@ export function CenimaProvider({ children }) {
     return data.flatMap((d) => d.results);
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const fetchSet = {
+          movies: "movie",
+          "tv-shows": "tv",
+        };
+
+        // If mediaType doesn't match, stop
+        if (!fetchSet[mediaType]) return;
+
+        // Build URLs
+        const genreURL = `https://api.themoviedb.org/3/genre/${fetchSet[mediaType]}/list?api_key=${API_KEY}`;
+        const languagesURL = `https://api.themoviedb.org/3/configuration/languages?api_key=${API_KEY}`;
+
+        // Fetch in parallel
+        const [genreRes, langRes] = await Promise.all([
+          fetch(genreURL),
+          fetch(languagesURL),
+        ]);
+
+        const genreData = await genreRes.json();
+        const langData = await langRes.json();
+
+        setGenres(genreData.genres); // [{id, name}]
+        setLanguages(langData); // [{iso_639_1, english_name, name}]
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, [mediaType]);
+
   return (
     <CenimaContext.Provider
       value={{
@@ -316,7 +353,9 @@ export function CenimaProvider({ children }) {
         setWatchlist,
         topMovies,
         topTv,
-        trendAll
+        trendAll,
+        genres,
+        languages
       }}
     >
       {children}

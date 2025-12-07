@@ -1,9 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import MovieCard3 from "../components/MovieCard3";
 import { CenimaContext } from "../context/CenimaContext";
-import { API_KEY } from "../context/api";
 
 function Movies() {
   const {
@@ -14,13 +13,13 @@ function Movies() {
     watchlist,
     topMovies,
     topTv,
+    languages,
+    genres
   } = useContext(CenimaContext);
 
   const [selectedGenre, setSelectedGenre] = useState({});
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [query, setQuery] = useState("");
-  const [genres, setGenres] = useState([]);
-  const [languages, setLanguages] = useState([]);
   const { mediaType, category } = useParams();
 
   const dataSets = {
@@ -62,40 +61,6 @@ function Movies() {
   function handleSearch(e) {
     e.preventDefault();
   }
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const fetchSet = {
-          movies: "movie",
-          "tv-shows": "tv",
-        };
-
-        // If mediaType doesn't match, stop
-        if (!fetchSet[mediaType]) return;
-
-        // Build URLs
-        const genreURL = `https://api.themoviedb.org/3/genre/${fetchSet[mediaType]}/list?api_key=${API_KEY}`;
-        const languagesURL = `https://api.themoviedb.org/3/configuration/languages?api_key=${API_KEY}`;
-
-        // Fetch in parallel
-        const [genreRes, langRes] = await Promise.all([
-          fetch(genreURL),
-          fetch(languagesURL),
-        ]);
-
-        const genreData = await genreRes.json();
-        const langData = await langRes.json();
-
-        setGenres(genreData.genres); // [{id, name}]
-        setLanguages(langData); // [{iso_639_1, english_name, name}]
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
-  }, [mediaType]);
 
   // console.log(selectedLanguage);
 
