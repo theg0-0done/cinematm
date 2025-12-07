@@ -11,7 +11,7 @@ function MoviePage() {
   const [movieData, setMovieData] = useState(null);
   const { id } = useParams();
 
-  const { formatDate, setWatchlist, watchlist } = useContext(CenimaContext);
+  const { formatDate, setWatchlist } = useContext(CenimaContext);
 
   useEffect(() => {
     const fetchMovie = async () => {

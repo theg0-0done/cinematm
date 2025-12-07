@@ -62,7 +62,7 @@ function Movies() {
     e.preventDefault();
   }
 
-  // console.log(selectedLanguage);
+  console.log(genres.length);
 
   return (
     <section className="all-movies-page">

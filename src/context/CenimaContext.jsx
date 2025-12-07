@@ -5,7 +5,6 @@ import {
   useRef,
 } from "react";
 import { API_KEY } from "./api";
-import { useParams } from "react-router-dom";
 
 export const CenimaContext = createContext();
 
@@ -26,7 +25,6 @@ export function CenimaProvider({ children }) {
   const [languages, setLanguages] = useState([]);
 
   const containerRef = useRef(null);
-  const {mediaType} = useParams()
 
   useEffect(() => {
     const fetchTrendingActors = async () => {
@@ -304,36 +302,31 @@ export function CenimaProvider({ children }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const fetchSet = {
-          movies: "movie",
-          "tv-shows": "tv",
-        };
-
-        // If mediaType doesn't match, stop
-        if (!fetchSet[mediaType]) return;
-
-        // Build URLs
-        const genreURL = `https://api.themoviedb.org/3/genre/${fetchSet[mediaType]}/list?api_key=${API_KEY}`;
+        // Fetch genres and languages for BOTH movies and tv
+        const genreMovieURL = `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}`;
+        const genreTvURL = `https://api.themoviedb.org/3/genre/tv/list?api_key=${API_KEY}`;
         const languagesURL = `https://api.themoviedb.org/3/configuration/languages?api_key=${API_KEY}`;
 
-        // Fetch in parallel
-        const [genreRes, langRes] = await Promise.all([
-          fetch(genreURL),
+        const [genreMovieRes, genreTvRes, langRes] = await Promise.all([
+          fetch(genreMovieURL),
+          fetch(genreTvURL),
           fetch(languagesURL),
         ]);
 
-        const genreData = await genreRes.json();
+        const genreMovieData = await genreMovieRes.json();
+        const genreTvData = await genreTvRes.json();
         const langData = await langRes.json();
 
-        setGenres(genreData.genres); // [{id, name}]
-        setLanguages(langData); // [{iso_639_1, english_name, name}]
+        // Combine genres from both
+        setGenres([...genreMovieData.genres, ...genreTvData.genres]);
+        setLanguages(langData);
       } catch (error) {
         console.error(error);
       }
     };
 
     fetchData();
-  }, [mediaType]);
+  }, []);
 
   return (
     <CenimaContext.Provider
