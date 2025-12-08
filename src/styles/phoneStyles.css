@@ -125,7 +125,7 @@
 
 .movie-background {
     flex: 0 0 100vw;
-    height: 82vh;
+    min-height: 82vh;
     margin-top: 6vh;
     scroll-snap-align: start;
     box-sizing: border-box;
@@ -262,7 +262,7 @@
 
 .trend-movieS {
     display: flex;
-    gap: 1.4rem;
+    gap: 0.6rem;
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
@@ -615,7 +615,7 @@ select option {
     mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 60%, transparent 100%);
     background-size: 100% 100%;
     width: 100vw;
-    height: 30vh;
+    height: 24vh;
     margin-top: 10vh;
 }
 

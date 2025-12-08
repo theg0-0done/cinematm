@@ -1,6 +1,6 @@
 @media (min-width: 1024px) {
     .movie-background {
-        height: 80vh;
+        min-height: 80vh;
     }
 
     .logo {
