@@ -125,7 +125,7 @@
 
 .movie-background {
     flex: 0 0 100vw;
-    min-height: 82vh;
+    min-height: 86vh;
     margin-top: 6vh;
     scroll-snap-align: start;
     box-sizing: border-box;
@@ -148,7 +148,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 2rem;
+    gap: 8px;
     box-sizing: border-box;
     width: 100%;
     height: 100%;
