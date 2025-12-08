@@ -30,10 +30,6 @@
         width: 12vw;
     }
 
-    .movie-page-background {
-        height: 96vh;
-    }
-
     .review {
         flex: 0 0 88%;
     }

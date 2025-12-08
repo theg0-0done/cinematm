@@ -1,4 +1,4 @@
-/* display: none */
+/* cast */
 
 .navbar {
     position: fixed;
@@ -10,7 +10,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
+    padding: 8px 2rem;
     color: whitesmoke;
     z-index: 2;
     transition: all 0.3s ease-in-out;
@@ -125,8 +125,8 @@
 
 .movie-background {
     flex: 0 0 100vw;
-    min-height: 80vh;
-    margin-top: 10vh;
+    height: 82vh;
+    margin-top: 6vh;
     scroll-snap-align: start;
     box-sizing: border-box;
     background-size: cover;
@@ -191,6 +191,7 @@
     padding-inline: 2rem;
     white-space: wrap;
     text-shadow: 0 0 10px black;
+    width: 80%;
 }
 
 .movie-details h1 {
@@ -210,7 +211,7 @@
 }
 
 .buttons-container button {
-    background-color: black;
+    background-color: rgb(0, 0, 0, 0.7);
     color: #57EBDE;
     font-weight: 600;
     border: 1px #57EBDE solid;
@@ -683,12 +684,13 @@ select option {
 .moviePage-buttons-container button:active {
     transform: scale(0.98);
 }
+
 .genres-container {
     display: flex;
-    flex-wrap: wrap;
+    overflow-x: auto;
+    width: 80vw;
     gap: 8px;
     padding-block: 2px;
-    margin-bottom: 1rem;
 }
 
 .genres-container button {
@@ -699,6 +701,7 @@ select option {
     padding: 4px 8px;
     border-radius: 1rem;
     border: 1px white solid;
+    white-space: nowrap;
 }
 
 .labels-container {
@@ -735,7 +738,7 @@ select option {
 
 .cast-container {
     display: flex;
-    gap: 1rem;
+    gap: 4px;
     overflow-x: auto;
 }
 
@@ -750,8 +753,12 @@ select option {
 .movie-cast img {
     border: 1px #57EBDE solid;
     border-radius: 1rem;
-    width: 3.3rem;
+    width: 4rem;
     padding: 4px;
+}
+
+.movie-cast p {
+    margin: 2px;
 }
 
 .movie-page-infos {

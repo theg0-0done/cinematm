@@ -14,7 +14,8 @@ function Movies() {
     topMovies,
     topTv,
     languages,
-    genres
+    mvGenres,
+    tvGenres
   } = useContext(CenimaContext);
 
   const [selectedGenre, setSelectedGenre] = useState({});
@@ -62,7 +63,9 @@ function Movies() {
     e.preventDefault();
   }
 
-  console.log(genres.length);
+  const genres = mediaType === "movies" ? mvGenres : tvGenres
+
+  // console.log(genres.length);
 
   return (
     <section className="all-movies-page">

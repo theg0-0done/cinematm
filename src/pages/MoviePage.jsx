@@ -87,7 +87,7 @@ function MoviePage() {
       <div className="movie-page-container">
         <div className="movie-page-details">
           <img
-            src={`https://image.tmdb.org/t/p/w1280${movieData.poster_path}`}
+            src={`https://image.tmdb.org/t/p/w780${movieData.poster_path}`}
             alt={movieData.title}
           />
           <div className="movie-page-details2">
@@ -198,7 +198,7 @@ function MoviePage() {
                 actor.profile_path && (
                   <div className="movie-cast" key={actor.id}>
                     <img
-                      src={`https://image.tmdb.org/t/p/w1280${actor.profile_path}`}
+                      src={`https://image.tmdb.org/t/p/h632${actor.profile_path}`}
                       alt={actor.name}
                     />
                     <p>{actor.name}</p>

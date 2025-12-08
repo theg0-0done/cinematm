@@ -1,6 +1,6 @@
 @media (min-width: 1024px) {
     .movie-background {
-        min-height: 100vh;
+        height: 80vh;
     }
 
     .logo {
@@ -10,7 +10,7 @@
     .nav-links {
         color: whitesmoke;
         display: flex;
-        gap: 2rem;
+        gap: 1rem 2rem;
         justify-content: space-between;
     }
 
@@ -29,11 +29,12 @@
     .movie-container {
         backdrop-filter: none;
         align-items: flex-start;
+        justify-content: flex-end;
+        padding-bottom: 3rem;
     }
 
     .movie-details {
         max-width: 50%;
-        gap: 12px;
     }
 
     .movie-details h1 {
@@ -45,9 +46,11 @@
         font-weight: 500;
     }
 
-    .movie-details p {
+    .movie-details-overview {
         display: block;
-        font-weight: 500;
+        width: 500;
+        width: 100%;
+        margin-top: 0;
     }
 
     .genres-container,
@@ -147,6 +150,7 @@
     .movie-page-background {
         height: 70vh;
         mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 30%, transparent 80%);
+        margin-top: 2rem;
     }
 
     .movie-page-container {

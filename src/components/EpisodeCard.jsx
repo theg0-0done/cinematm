@@ -11,7 +11,7 @@ function EpisodeCard({ ep }) {
       <img
         src={
           ep.still_path
-            ? `https://image.tmdb.org/t/p/w1280${ep.still_path}`
+            ? `https://image.tmdb.org/t/p/w780${ep.still_path}`
             : "https://preview.redd.it/qm5q37j0ba931.png?width=1080&crop=smart&auto=webp&s=6aaf20d7f0e8e65ab87c8e9b720ea6b0207776ca"
         }
         alt={ep.name}

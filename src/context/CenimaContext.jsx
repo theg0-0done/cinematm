@@ -21,7 +21,8 @@ export function CenimaProvider({ children }) {
   const [inCinema, setInCinema] = useState([]);
   const [upComing, setUpComing] = useState([]);
   const [watchlist, setWatchlist] = useState([]);
-  const [genres, setGenres] = useState([]);
+  const [mvGenres, setMvGenres] = useState([]);
+  const [tvGenres, setTvGenres] = useState([]);
   const [languages, setLanguages] = useState([]);
 
   const containerRef = useRef(null);
@@ -318,7 +319,8 @@ export function CenimaProvider({ children }) {
         const langData = await langRes.json();
 
         // Combine genres from both
-        setGenres([...genreMovieData.genres, ...genreTvData.genres]);
+        setMvGenres(genreMovieData.genres);
+        setTvGenres(genreTvData.genres);
         setLanguages(langData);
       } catch (error) {
         console.error(error);
@@ -347,7 +349,8 @@ export function CenimaProvider({ children }) {
         topMovies,
         topTv,
         trendAll,
-        genres,
+        tvGenres,
+        mvGenres,
         languages
       }}
     >

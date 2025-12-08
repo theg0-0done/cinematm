@@ -7,7 +7,11 @@ import { Link } from "react-router-dom";
 import { IoIosArrowForward } from "react-icons/io";
 
 function MovieReview({ movie }) {
-  const { setWatchlist, genres } = useContext(CenimaContext);
+  const { setWatchlist, tvGenres, mvGenres } = useContext(CenimaContext);
+  const mediaGenres = (movie.media_type === "movie" ? mvGenres : tvGenres)
+    .filter((genre) => movie.genre_ids.includes(genre.id))
+    .map((g) => <button key={g.id}>{g.name}</button>);
+
   return (
     movie.v_backdrop && (
       <div
@@ -22,7 +26,7 @@ function MovieReview({ movie }) {
             <Link to={`${movie.media_type}/${movie.id}`}>
               <img
                 className="poster-img"
-                src={`https://image.tmdb.org/t/p/w1280${movie.poster_path}`}
+                src={`https://image.tmdb.org/t/p/w780${movie.poster_path}`}
                 alt="movie poster"
               />
             </Link>
@@ -30,13 +34,7 @@ function MovieReview({ movie }) {
           <div className="movie-details">
             <h1>{movie.title || movie.name}</h1>
             <p className="movie-details-overview">{movie.overview}</p>
-            <div className="genres-container">
-              {genres
-                .filter((genre) => movie.genre_ids.includes(genre.id))
-                .map((g) => (
-                  <button key={g.id}>{g.name}</button>
-                ))}
-            </div>
+            <div className="genres-container">{mediaGenres}</div>
             <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
               <ReactStars
                 count={5}
@@ -46,7 +44,7 @@ function MovieReview({ movie }) {
                 edit={false}
               />
               <p>|</p>
-              <p style={{ fontSize: "1.4rem" }}>
+              <p style={{ fontSize: "1.4rem", margin: 0 }}>
                 {movie.first_air_date?.split("-")[0] ||
                   movie.release_date?.split("-")[0]}
               </p>
