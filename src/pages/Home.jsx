@@ -24,7 +24,7 @@ function Home() {
 
   return (
     <section className="home-section">
-      <div className="movieS-container" /*ref={containerRef}*/>
+      <div className="movieS-container" ref={containerRef}>
         {trendAll.map((m) => {
           return <MovieReview key={m.name} movie={m} />;
         })}
