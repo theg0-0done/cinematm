@@ -24,7 +24,7 @@ function Home() {
 
   return (
     <section className="home-section">
-      <div className="movieS-container" /*ref={containerRef}*/>
+      <div className="movieS-container" ref={containerRef}>
         {trendAll.map((m) => {
           return <MovieReview key={m.name} movie={m} />;
         })}
@@ -151,7 +151,7 @@ function Home() {
                 <div className="trend-actor">
                   <img
                     className="actor-avatar"
-                    src={`https://image.tmdb.org/t/p/h632/${actor.profile_path}`}
+                    src={`https://image.tmdb.org/t/p/w1280/${actor.profile_path}`}
                     alt=""
                   />
                   <p>{actor.name}</p>
