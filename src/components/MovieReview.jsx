@@ -7,7 +7,8 @@ import { Link } from "react-router-dom";
 import { IoIosArrowForward } from "react-icons/io";
 
 function MovieReview({ movie }) {
-  const { setWatchlist, tvGenres, mvGenres } = useContext(CenimaContext);
+  const { setWatchlist, watchlist, tvGenres, mvGenres } =
+    useContext(CenimaContext);
   const mediaGenres = (movie.media_type === "movie" ? mvGenres : tvGenres)
     .filter((genre) => movie.genre_ids.includes(genre.id))
     .map((g) => <button key={g.id}>{g.name}</button>);
@@ -51,12 +52,25 @@ function MovieReview({ movie }) {
             </div>
             <div className="buttons-container">
               <button
+                style={
+                  watchlist.includes(movie.id)
+                    ? {
+                        backgroundColor: "#57EBDE",
+                        color: "black",
+                        fontWeight: "bold",
+                      }
+                    : {}
+                }
                 onClick={() => {
-                  setWatchlist((prev) =>
-                    prev.includes(movie)
-                      ? prev.filter((m) => m === movie)
-                      : [...prev, movie]
-                  );
+                  setWatchlist((prev) => {
+                    const exist = prev.some((item) => item.id === movie.id);
+                    return exist
+                      ? prev.filter((itm) => itm.id !== movieData.id)
+                      : [
+                          ...prev,
+                          { id: movie.id, media_type: movie.media_type },
+                        ];
+                  });
                 }}
               >
                 Add To Watchlist <TbFolderPlus color="#57EBDE" size={26} />

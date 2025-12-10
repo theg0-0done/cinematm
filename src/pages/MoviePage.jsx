@@ -9,9 +9,10 @@ import { CenimaContext } from "../context/CenimaContext";
 
 function MoviePage() {
   const [movieData, setMovieData] = useState(null);
+  const [showTrailer, setShowTrailer] = useState(false);
   const { id } = useParams();
 
-  const { formatDate, setWatchlist } = useContext(CenimaContext);
+  const { formatDate, setWatchlist, watchlist } = useContext(CenimaContext);
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -73,8 +74,12 @@ function MoviePage() {
     return num;
   }
 
-  // console.log(watchlist?.length);
-  
+  const trailerKey =
+    movieData.videos.results.find((v) => v.type.toLowerCase() === "trailer")
+      ?.key || movieData.videos.results[0]?.key;
+
+  // console.log(watchlist);
+  // console.log(watchlist.length);
 
   return (
     <section className="movie-page">
@@ -90,6 +95,7 @@ function MoviePage() {
             src={`https://image.tmdb.org/t/p/w780${movieData.poster_path}`}
             alt={movieData.title}
           />
+
           <div className="movie-page-details2">
             <h1>{movieData.title}</h1>
             <h4>{movieData.tagline}</h4>
@@ -133,31 +139,94 @@ function MoviePage() {
             <div className="moviePage-buttons-container">
               <button
                 onClick={() => {
-                  setWatchlist((prev) =>
-                    prev.includes(movieData)
-                      ? prev.filter((m) => m === movieData)
-                      : [...prev, movieData]
-                  );
+                  setWatchlist((prev) => {
+                    const exist = prev.some((item) => item.id === movieData.id);
+                    return exist
+                      ? prev.filter((item) => item.id !== movieData.id)
+                      : [...prev, { id: movieData.id, media_type: "movie" }];
+                  });
                 }}
+                style={
+                  watchlist.includes(movieData.id)
+                    ? {
+                        backgroundColor: "#57EBDE",
+                        color: "black",
+                        fontWeight: "bold",
+                      }
+                    : {}
+                }
               >
-                Add To Watchlist <TbFolderPlus color="#57EBDE" size={18} />
+                {watchlist.includes(movieData.id)
+                  ? "Remove From Watchlist"
+                  : "Add To Watchlist"}{" "}
+                <TbFolderPlus
+                  style={
+                    watchlist.includes(movieData.id)
+                      ? {
+                          color: "black",
+                        }
+                      : {}
+                  }
+                  color="#57EBDE"
+                  size={18}
+                />
               </button>
-              <a
-                href={`https://www.youtube.com/watch?v=${
-                  movieData.videos.results.find(
-                    (v) => v.type.toLowerCase() === "trailer"
-                  )?.key || movieData.videos.results[0]?.key
-                }`}
-                target="_blank"
-                style={{ textDecoration: "none" }}
+              <button
+                style={
+                  showTrailer
+                    ? {
+                        backgroundColor: "#57EBDE",
+                        color: "black",
+                        fontWeight: "bold",
+                      }
+                    : {}
+                }
+                onClick={() => setShowTrailer(!showTrailer)}
               >
-                <button>
-                  Watch Trailer <BiMoviePlay color="#57EBDE" size={18} />
-                </button>
-              </a>
+                {showTrailer ? "Hide" : "Watch"} Trailer{" "}
+                <BiMoviePlay
+                  style={showTrailer && { color: "black" }}
+                  color="#57EBDE"
+                  size={18}
+                />
+              </button>
             </div>
           </div>
+
+          {showTrailer && trailerKey && (
+            <div className="large-screen-trailer">
+              <p className="overview">
+                "{movieData.title || movieData.name}" Official Trailer
+              </p>
+              <iframe
+                src={`https://www.youtube.com/embed/${trailerKey}`}
+                title="YouTube Trailer"
+                frameBorder="0"
+                id="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              />
+            </div>
+          )}
         </div>
+
+        {trailerKey && showTrailer && (
+          <div className="small-screen-trailer">
+            <p className="overview">
+              "{movieData.title || movieData.name}" Official Trailer
+            </p>
+            <iframe
+              src={`https://www.youtube.com/embed/${trailerKey}`}
+              title="YouTube Trailer"
+              frameBorder="0"
+              id="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            />
+          </div>
+        )}
 
         <div className="small-screen-elements">
           <p className="overview">Genres:</p>

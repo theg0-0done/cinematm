@@ -12,7 +12,7 @@ import { CenimaContext } from "../context/CenimaContext";
 function ShowPage() {
   const [showData, setShowData] = useState(null);
   const { id } = useParams();
-  const { setWatchlist } = useContext(CenimaContext);
+  const { setWatchlist, watchlist } = useContext(CenimaContext);
 
   useEffect(() => {
     const fetchShow = async () => {
@@ -86,7 +86,8 @@ function ShowPage() {
       )
     : ["Unknown"];
 
-  // console.log(showData.seasons_full[1].episodes.length);
+  // console.log(watchlist);
+  // console.log(watchlist.length);
 
   return (
     <section className="movie-page">
@@ -136,11 +137,12 @@ function ShowPage() {
             <div className="moviePage-buttons-container">
               <button
                 onClick={() => {
-                  setWatchlist((prev) =>
-                    prev.includes(showData)
-                      ? prev.filter((m) => m === showData)
-                      : [...prev, showData]
-                  );
+                  setWatchlist((prev) => {
+                    const exist = prev.some((item) => item.id === showData.id);
+                    return exist
+                      ? prev.filter((item) => item.id !== showData.id)
+                      : [...prev, { id: showData.id, media_type: "tv" }];
+                  });
                 }}
               >
                 Add To Watchlist <TbFolderPlus color="#57EBDE" size={18} />

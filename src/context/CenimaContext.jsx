@@ -1,9 +1,4 @@
-import {
-  createContext,
-  useEffect,
-  useState,
-  useRef,
-} from "react";
+import { createContext, useEffect, useState, useRef } from "react";
 import { API_KEY } from "./api";
 
 export const CenimaContext = createContext();
@@ -61,43 +56,51 @@ export function CenimaProvider({ children }) {
 
         const data = await response.json();
 
-        // ─────────────────────────────────────────────
-        // Fetch backdrop for BOTH movie + tv
-        // ─────────────────────────────────────────────
         const fetchOneBackdrop = async (item) => {
-          if (item.media_type === "person") return null; // no backdrops for actors
+          if (item.media_type === "person")
+            return { enBackdrop: null, movieTrailer: null };
 
-          // pick correct endpoint based on media_type
           const endpoint =
             item.media_type === "movie" ? `movie/${item.id}` : `tv/${item.id}`;
 
           const res = await fetch(
-            `https://api.themoviedb.org/3/${endpoint}?api_key=${API_KEY}&append_to_response=images`
+            `https://api.themoviedb.org/3/${endpoint}?api_key=${API_KEY}&append_to_response=images,videos`
           );
+
           const details = await res.json();
 
-          const backdrops = details.images?.backdrops || [];
-
+          // ✔ correct fallback: use details NOT data
           const enBackdrop =
-            backdrops.find((b) => b.iso_639_1 === "en")?.file_path ||
-            backdrops[0]?.file_path ||
+            details.images?.backdrops?.find((b) => b.iso_639_1 === "en")
+              ?.file_path ||
+            details.images?.backdrops?.[0]?.file_path ||
             null;
 
-          return enBackdrop;
+          const movieTrailer =
+            details.videos?.results?.find(
+              (v) =>
+                v.type === "Trailer" &&
+                v.site === "YouTube" &&
+                v.iso_639_1 === "en"
+            )?.key ||
+            details.videos?.results?.[0]?.key ||
+            null;
+
+          return { enBackdrop, movieTrailer };
         };
 
-        // ─────────────────────────────────────────────
-        // Attach backdrops to the trending results
-        // ─────────────────────────────────────────────
         const attach = async (list) =>
           Promise.all(
-            list.map(async (item) => ({
-              ...item,
-              v_backdrop: await fetchOneBackdrop(item),
-            }))
+            list.map(async (item) => {
+              const { enBackdrop, movieTrailer } = await fetchOneBackdrop(item);
+              return {
+                ...item,
+                v_backdrop: enBackdrop,
+                trailer: movieTrailer,
+              };
+            })
           );
 
-        // MUST await attach()
         setTrendAll(await attach(data.results));
       } catch (error) {
         console.error(error);
@@ -130,7 +133,7 @@ export function CenimaProvider({ children }) {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [trendMovies]);
+  }, [trendAll]);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -199,7 +202,6 @@ export function CenimaProvider({ children }) {
           "https://api.themoviedb.org/3/movie/top_rated?api_key=" + API_KEY,
       };
 
-      // fetch backdrop + trailer
       const fetchOneBackdrop = async (id) => {
         const res = await fetch(
           `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&append_to_response=images,videos`
@@ -221,7 +223,6 @@ export function CenimaProvider({ children }) {
         return { enBackdrop, movieTrailer };
       };
 
-      // attach movie type and extra data
       const attach = async (list) =>
         Promise.all(
           list.map(async (m) => {
@@ -236,7 +237,6 @@ export function CenimaProvider({ children }) {
           })
         );
 
-      // fetch 10 pages for each section
       const [nowPlaying, upcoming, trending, topMovie] = await Promise.all(
         Object.values(endpoints).map((url) => fetchManyPages(url, 10))
       );
@@ -351,7 +351,7 @@ export function CenimaProvider({ children }) {
         trendAll,
         tvGenres,
         mvGenres,
-        languages
+        languages,
       }}
     >
       {children}

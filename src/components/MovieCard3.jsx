@@ -23,7 +23,11 @@ function MovieCard3({ movie }) {
               }}
               title="Remove from watchlist"
               onClick={() =>
-                setWatchlist((prev) => prev.filter((m) => m !== movie))
+                setWatchlist((prev) =>
+                  Array.isArray(prev)
+                    ? prev.filter((item) => item.id !== movie.id)
+                    : []
+                )
               }
             >
               <MdBookmark color="white" size={22} />

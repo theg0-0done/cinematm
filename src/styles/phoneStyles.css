@@ -1,4 +1,4 @@
-/* cast */
+/* display: none */
 
 .navbar {
     position: fixed;
@@ -52,6 +52,7 @@
 .nav-links,
 .overview-lg,
 .large-screen-elements,
+.large-screen-trailer,
 .see-more {
     display: none;
 }
@@ -887,4 +888,10 @@ select option {
     border: transparent;
     padding: 8px 1rem;
     border-radius: 8px;
+}
+
+.small-screen-trailer iframe {
+    margin: 1rem ;
+    border: 1px #57EBDE solid;
+    border-radius: 1rem;
 }

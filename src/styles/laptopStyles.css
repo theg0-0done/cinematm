@@ -18,7 +18,8 @@
     .poster-container,
     .overview-container,
     .all-genres-container,
-    .small-screen-elements{
+    .small-screen-elements,
+    .small-screen-trailer {
         display: none;
     }
 
@@ -159,8 +160,10 @@
     }
 
     .movie-page-details {
-        width: 90%;
+        width: fit-content;
         gap: 4rem;
+        justify-content: space-between;
+        width: 100%;
     }
 
     .movie-page-details img {
@@ -173,7 +176,8 @@
 
     .large-screen-elements,
     .movie-page-rating-lg,
-    .see-more {
+    .see-more,
+    .large-screen-trailer {
         display: block;
     }
 
@@ -202,7 +206,7 @@
         font-size: 1.2rem;
         width: 80%;
     }
-    
+
     .review {
         flex: 0 0 94%;
     }
@@ -220,7 +224,8 @@
         align-items: flex-start;
     }
 
-    .ep-outer-container, .all-movies-header {
+    .ep-outer-container,
+    .all-movies-header {
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -264,7 +269,7 @@
         padding: 6px;
         font-size: 1rem;
     }
-    
+
     select option {
         font-size: 1rem;
     }
@@ -272,13 +277,25 @@
     .athenticate-page {
         min-height: 90vh;
     }
-    
+
     .athenticate-form input {
         font-size: 1rem;
         width: 40%;
     }
 
-        .athenticate-form button {
-            font-size: 1rem;
-        }
+    .athenticate-form button {
+        font-size: 1rem;
+    }
+
+    .large-screen-trailer {
+        width: 90vw;
+        height: 40vh;
+    }
+
+    .large-screen-trailer iframe {
+        border: 1px #57EBDE solid;
+        border-radius: 1rem;
+        width: 100%;
+        height: 100%;
+    }
 }

@@ -18,9 +18,10 @@ function Home() {
     trendAll,
     topMovies,
     topTv,
+    watchlist
   } = useContext(CenimaContext);
 
-  // console.log(trendAll.length);
+  // console.log(watchlist);
 
   return (
     <section className="home-section">

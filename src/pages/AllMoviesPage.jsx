@@ -3,6 +3,7 @@ import { FaSearch } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import MovieCard3 from "../components/MovieCard3";
 import { CenimaContext } from "../context/CenimaContext";
+import { API_KEY } from "../context/api";
 
 function Movies() {
   const {
@@ -15,12 +16,13 @@ function Movies() {
     topTv,
     languages,
     mvGenres,
-    tvGenres
+    tvGenres,
   } = useContext(CenimaContext);
 
   const [selectedGenre, setSelectedGenre] = useState({});
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [query, setQuery] = useState("");
+  const [watchlistItems, setWatchlistItems] = useState([]);
   const { mediaType, category } = useParams();
 
   const dataSets = {
@@ -41,7 +43,7 @@ function Movies() {
     <MovieCard3 key={index} movie={el} />
   ));
 
-  const watchlistElements = watchlist.map((el, index) => (
+  const watchlistElements = watchlistItems.map((el, index) => (
     <MovieCard3 key={index} movie={el} />
   ));
 
@@ -63,9 +65,29 @@ function Movies() {
     e.preventDefault();
   }
 
-  const genres = mediaType === "movies" ? mvGenres : tvGenres
+  const genres = mediaType === "movies" ? mvGenres : tvGenres;
 
-  // console.log(genres.length);
+  useEffect(() => {
+    const fetchWatchlist = async () => {
+      try {
+        const urls = watchlist.map(
+          (item) =>
+            `https://api.themoviedb.org/3/${item.media_type}/${item.id}?api_key=${API_KEY}`
+        );
+
+        const responses = await Promise.all(urls.map((url) => fetch(url)));
+        if (!responses) return;
+        const data = await Promise.all(responses.map((res) => res.json()));
+
+        setWatchlistItems(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchWatchlist();
+  }, [watchlist]);
+
+  // console.log(watchlistElements.length);
 
   return (
     <section className="all-movies-page">
