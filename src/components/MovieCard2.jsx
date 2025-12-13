@@ -17,7 +17,7 @@ function MovieCard2({ movie }) {
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           >
             <img
-              src={`https://image.tmdb.org/t/p/w1280${movie.v_backdrop}`}
+              src={`https://image.tmdb.org/t/p/w780${movie.v_backdrop}`}
               alt=""
             />
           </Link>

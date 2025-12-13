@@ -19,7 +19,7 @@ function MovieReview({ movie }) {
         className="movie-background"
         key={movie.id}
         style={{
-          backgroundImage: `url(https://image.tmdb.org/t/p/w1280${movie.v_backdrop})`,
+          backgroundImage: `url(https://image.tmdb.org/t/p/w780${movie.v_backdrop})`,
         }}
       >
         <div className="movie-container">
@@ -50,8 +50,8 @@ function MovieReview({ movie }) {
                   movie.release_date?.split("-")[0]}
               </p>
             </div>
-            <div className="buttons-container">
-              <button
+            <div style={{display: 'flex', gap: '1rem'}}>
+              <button className="action-btn"
                 style={
                   watchlist.includes(movie.id)
                     ? {
@@ -80,12 +80,12 @@ function MovieReview({ movie }) {
                 target="_blank"
                 style={{ textDecoration: "none" }}
               >
-                <button>
+                <button className="action-btn">
                   Watch Trailer <BiMoviePlay color="#57EBDE" size={26} />
                 </button>
               </a>
               <Link to={`${movie.media_type}/${movie.id}`} className="see-more">
-                <button>
+                <button className="action-btn">
                   See More{" "}
                   <IoIosArrowForward
                     style={{ textDecoration: "none" }}

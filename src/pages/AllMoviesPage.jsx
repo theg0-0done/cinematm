@@ -67,27 +67,30 @@ function Movies() {
 
   const genres = mediaType === "movies" ? mvGenres : tvGenres;
 
-  useEffect(() => {
-    const fetchWatchlist = async () => {
-      try {
-        const urls = watchlist.map(
-          (item) =>
-            `https://api.themoviedb.org/3/${item.media_type}/${item.id}?api_key=${API_KEY}`
-        );
+ useEffect(() => {
+   const fetchWatchlist = async () => {
+     try {
+       const urls = watchlist.map(
+         (item) =>
+           `https://api.themoviedb.org/3/${item.media_type}/${item.id}?api_key=${API_KEY}`
+       );
 
-        const responses = await Promise.all(urls.map((url) => fetch(url)));
-        if (!responses) return;
-        const data = await Promise.all(responses.map((res) => res.json()));
+       const responses = await Promise.all(urls.map((url) => fetch(url)));
+       const data = await Promise.all(responses.map((res) => res.json()));
 
-        setWatchlistItems(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchWatchlist();
-  }, [watchlist]);
+       const withMediaType = data.map((item, i) => ({
+         ...item,
+         media_type: watchlist[i].media_type,
+       }));
 
-  // console.log(watchlistElements.length);
+       setWatchlistItems(withMediaType);
+     } catch (error) {
+       console.error(error);
+     }
+   };
+
+   if (watchlist.length) fetchWatchlist();
+ }, [watchlist]);
 
   return (
     <section className="all-movies-page">

@@ -86,15 +86,12 @@ function ShowPage() {
       )
     : ["Unknown"];
 
-  // console.log(watchlist);
-  // console.log(watchlist.length);
-
   return (
     <section className="movie-page">
       <div
         className="movie-page-background"
         style={{
-          backgroundImage: `url(https://image.tmdb.org/t/p/w1280${
+          backgroundImage: `url(https://image.tmdb.org/t/p/w780${
             showData.images.backdrops.find((b) => b.iso_639_1 === "en")
               ?.file_path || showData.images.backdrops[0]?.file_path
           })`,
@@ -103,7 +100,7 @@ function ShowPage() {
       <div className="movie-page-container">
         <div className="movie-page-details">
           <img
-            src={`https://image.tmdb.org/t/p/w1280${showData.poster_path}`}
+            src={`https://image.tmdb.org/t/p/w780${showData.poster_path}`}
             alt={showData.name}
           />
           <div className="movie-page-details2">
@@ -197,8 +194,8 @@ function ShowPage() {
           <label>
             Release Date{" "}
             <p>
-              {showData.first_air_date.split("-")[0]} -{" "}
-              {showData.last_air_date.split("-")[0]}
+              {showData.first_air_date?.split("-")[0]} -{" "}
+              {showData.last_air_date?.split("-")[0] || 'Now'}
             </p>
           </label>
           <label>

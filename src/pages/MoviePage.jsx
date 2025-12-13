@@ -78,9 +78,6 @@ function MoviePage() {
     movieData.videos.results.find((v) => v.type.toLowerCase() === "trailer")
       ?.key || movieData.videos.results[0]?.key;
 
-  // console.log(watchlist);
-  // console.log(watchlist.length);
-
   return (
     <section className="movie-page">
       <div
@@ -92,7 +89,7 @@ function MoviePage() {
       <div className="movie-page-container">
         <div className="movie-page-details">
           <img
-            src={`https://image.tmdb.org/t/p/w780${movieData.poster_path}`}
+            src={`https://image.tmdb.org/t/p/w500${movieData.poster_path}`}
             alt={movieData.title}
           />
 
@@ -136,83 +133,43 @@ function MoviePage() {
               )}
             </div>
 
-            <div className="moviePage-buttons-container">
-              <button
-                onClick={() => {
-                  setWatchlist((prev) => {
-                    const exist = prev.some((item) => item.id === movieData.id);
-                    return exist
-                      ? prev.filter((item) => item.id !== movieData.id)
-                      : [...prev, { id: movieData.id, media_type: "movie" }];
-                  });
-                }}
+            <button className="action-btn"
+              onClick={() => {
+                setWatchlist((prev) => {
+                  const exist = prev.some((item) => item.id === movieData.id);
+                  return exist
+                    ? prev.filter((item) => item.id !== movieData.id)
+                    : [...prev, { id: movieData.id, media_type: "movie" }];
+                });
+              }}
+              style={
+                watchlist.some((m) => m.id === movieData.id)
+                  ? {
+                      backgroundColor: "#57EBDE",
+                      color: "black",
+                      fontWeight: "bold",
+                    }
+                  : {}
+              }
+            >
+              {watchlist.some((m) => m.id === movieData.id)
+                ? "Remove From Watchlist"
+                : "Add To Watchlist"}{" "}
+              <TbFolderPlus
                 style={
-                  watchlist.includes(movieData.id)
+                  watchlist.some((m) => m.id === movieData.id)
                     ? {
-                        backgroundColor: "#57EBDE",
                         color: "black",
-                        fontWeight: "bold",
                       }
                     : {}
                 }
-              >
-                {watchlist.includes(movieData.id)
-                  ? "Remove From Watchlist"
-                  : "Add To Watchlist"}{" "}
-                <TbFolderPlus
-                  style={
-                    watchlist.includes(movieData.id)
-                      ? {
-                          color: "black",
-                        }
-                      : {}
-                  }
-                  color="#57EBDE"
-                  size={18}
-                />
-              </button>
-              <button
-                style={
-                  showTrailer
-                    ? {
-                        backgroundColor: "#57EBDE",
-                        color: "black",
-                        fontWeight: "bold",
-                      }
-                    : {}
-                }
-                onClick={() => setShowTrailer(!showTrailer)}
-              >
-                {showTrailer ? "Hide" : "Watch"} Trailer{" "}
-                <BiMoviePlay
-                  style={showTrailer && { color: "black" }}
-                  color="#57EBDE"
-                  size={18}
-                />
-              </button>
-            </div>
+                color="#57EBDE"
+                size={18}
+              />
+            </button>
           </div>
 
-          {showTrailer && trailerKey && (
-            <div className="large-screen-trailer">
-              <p className="overview">
-                "{movieData.title || movieData.name}" Official Trailer
-              </p>
-              <iframe
-                src={`https://www.youtube.com/embed/${trailerKey}`}
-                title="YouTube Trailer"
-                frameBorder="0"
-                id="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-              />
-            </div>
-          )}
-        </div>
-
-        {trailerKey && showTrailer && (
-          <div className="small-screen-trailer">
+          <div className="large-screen-trailer">
             <p className="overview">
               "{movieData.title || movieData.name}" Official Trailer
             </p>
@@ -226,7 +183,7 @@ function MoviePage() {
               allowFullScreen
             />
           </div>
-        )}
+        </div>
 
         <div className="small-screen-elements">
           <p className="overview">Genres:</p>
@@ -254,6 +211,20 @@ function MoviePage() {
           </label>
         </div>
 
+        <div className="small-screen-trailer">
+          <p className="overview">
+            "{movieData.title || movieData.name}" Official Trailer
+          </p>
+          <iframe
+            src={`https://www.youtube.com/embed/${trailerKey}`}
+            title="YouTube Trailer"
+            id="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          />
+        </div>
+
         <label className="overview">
           Overview:
           <p>{movieData.overview}</p>
@@ -267,7 +238,7 @@ function MoviePage() {
                 actor.profile_path && (
                   <div className="movie-cast" key={actor.id}>
                     <img
-                      src={`https://image.tmdb.org/t/p/h632${actor.profile_path}`}
+                      src={`https://image.tmdb.org/t/p/w185${actor.profile_path}`}
                       alt={actor.name}
                     />
                     <p>{actor.name}</p>
