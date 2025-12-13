@@ -12,7 +12,7 @@ function MovieCard3({ movie }) {
     movie.poster_path && (
       <div className="all-movie">
         <div style={{ position: "relative" }}>
-          {mediaType === "watchlist" && (
+          {mediaType === "watchlist" ? (
             <div
               className="rating"
               style={{
@@ -32,6 +32,11 @@ function MovieCard3({ movie }) {
             >
               <MdBookmark color="white" size={22} />
             </div>
+          ) : (
+            <div className="rating">
+              {(movie.vote_average / 2).toFixed(1)}{" "}
+              <FaStar color="yellow" size={18} />{" "}
+            </div>
           )}
           <Link
             to={`/${movie.media_type}/${movie.id}`}
@@ -44,19 +49,8 @@ function MovieCard3({ movie }) {
             />
           </Link>
         </div>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <p>{movie.title || movie.name}</p>
-          <p style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-            {(movie.vote_average / 2).toFixed(1)}{" "}
-            <FaStar color="yellow" size={18} />{" "}
-          </p>
-        </div>
+
+        <p>{movie.title || movie.name}</p>
       </div>
     )
   );

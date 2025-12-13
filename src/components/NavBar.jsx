@@ -14,6 +14,7 @@ function NavBar() {
       >
         CinemaTV
       </Link>
+
       <div
         className={`ham-btn ${open ? "open" : ""}`}
         onClick={() => setOpen(!open)}
@@ -43,7 +44,7 @@ function NavBar() {
           className="link"
           to="/tv-shows"
         >
-          Tv Shows
+          Tv-Shows
         </Link>
         <Link
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

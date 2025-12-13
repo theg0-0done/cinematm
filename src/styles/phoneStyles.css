@@ -1,12 +1,19 @@
-/* movie-page-details2 */
+/* rating */
 
 .navbar {
     position: fixed;
     top: 1rem;
     right: 1rem;
     left: 1rem;
+
+    background: linear-gradient(to bottom,
+            rgba(174, 251, 42, 0.6),
+            rgba(87, 235, 222, 0.6));
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
     border-radius: 6rem;
-    background-image: linear-gradient(to bottom, #AEFB2A, #57EBDE);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -162,8 +169,9 @@
 
 .rating {
     position: absolute;
-    right: 1rem;
-    top: 1rem;
+    right: 4px;
+    top: 4px;
+    color: white;
     background-color: rgb(0, 0, 0, 0.8);
     margin: 0;
     padding: 4px 8px;
@@ -294,21 +302,21 @@
 
 .trend-actor {
     white-space: wrap;
+    font-size: 0.8rem;
 }
 
 .actor-avatar {
     border: 1px white solid;
-    padding: 4px;
+    padding: 2px;
     width: 4rem;
     height: auto;
-    border-radius: 1.8rem;
+    border-radius: 0.8rem;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
 }
 
 .actor-avatar:hover {
-    transform: scale(1.04);
-    box-shadow: 0 0 10px 0 rgb(225, 225, 225, 1);
+    transform: scale(1.05);
 }
 
 .trend-genres {
@@ -551,14 +559,15 @@ footer p {
 .all-movie {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     width: 28vw;
 }
 
 .all-movie p {
+    display: none;
     color: white;
     white-space: wrap;
-    max-width: 70%;
+    width: 100%;
+    margin-top: 4px;
 }
 
 .all-movie-poster {
@@ -889,7 +898,7 @@ select option {
 }
 
 .small-screen-trailer iframe {
-    margin: 1rem ;
+    margin: 1rem;
     border: 1px #57EBDE solid;
     border-radius: 1rem;
 }

@@ -50,10 +50,19 @@ function MovieReview({ movie }) {
                   movie.release_date?.split("-")[0]}
               </p>
             </div>
-            <div style={{display: 'flex', gap: '1rem'}}>
-              <button className="action-btn"
+            <div style={{ display: "flex", gap: "1rem" }}>
+              <button
+                className="action-btn"
+                onClick={() => {
+                  setWatchlist((prev) => {
+                    const exist = prev.some((item) => item.id === movie.id);
+                    return exist
+                      ? prev.filter((item) => item.id !== movie.id)
+                      : [...prev, { id: movie.id, media_type: "movie" }];
+                  });
+                }}
                 style={
-                  watchlist.includes(movie.id)
+                  watchlist.some((m) => m.id === movie.id)
                     ? {
                         backgroundColor: "#57EBDE",
                         color: "black",
@@ -61,19 +70,21 @@ function MovieReview({ movie }) {
                       }
                     : {}
                 }
-                onClick={() => {
-                  setWatchlist((prev) => {
-                    const exist = prev.some((item) => item.id === movie.id);
-                    return exist
-                      ? prev.filter((itm) => itm.id !== movieData.id)
-                      : [
-                          ...prev,
-                          { id: movie.id, media_type: movie.media_type },
-                        ];
-                  });
-                }}
               >
-                Add To Watchlist <TbFolderPlus color="#57EBDE" size={26} />
+                {watchlist.some((m) => m.id === movie.id)
+                  ? "Remove From Watchlist"
+                  : "Add To Watchlist"}{" "}
+                <TbFolderPlus
+                  style={
+                    watchlist.some((m) => m.id === movie.id)
+                      ? {
+                          color: "black",
+                        }
+                      : {}
+                  }
+                  color="#57EBDE"
+                  size={18}
+                />
               </button>
               <a
                 href={`https://youtube.com/watch?v=${movie.trailer}`}

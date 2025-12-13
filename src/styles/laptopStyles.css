@@ -74,6 +74,7 @@
 
     .actor-avatar {
         width: 8rem;
+        border-radius: 1rem;
     }
 
     .trend-genres {
@@ -155,7 +156,7 @@
     }
 
     .movie-page-container {
-        margin-top: -12rem;
+        margin-top: -8rem;
         padding-inline: 6rem;
     }
 

@@ -86,6 +86,10 @@ function ShowPage() {
       )
     : ["Unknown"];
 
+    const trailerKey =
+      showData.videos.results.find((v) => v.type.toLowerCase() === "trailer")
+        ?.key || showData.videos.results[0]?.key;
+
   return (
     <section className="movie-page">
       <div
@@ -103,6 +107,7 @@ function ShowPage() {
             src={`https://image.tmdb.org/t/p/w780${showData.poster_path}`}
             alt={showData.name}
           />
+
           <div className="movie-page-details2">
             <h1>{showData.name}</h1>
             <h4>{showData.tagline}</h4>
@@ -131,33 +136,55 @@ function ShowPage() {
               <p>Unavailable</p>
             )}
 
-            <div className="moviePage-buttons-container">
-              <button
-                onClick={() => {
-                  setWatchlist((prev) => {
-                    const exist = prev.some((item) => item.id === showData.id);
-                    return exist
-                      ? prev.filter((item) => item.id !== showData.id)
-                      : [...prev, { id: showData.id, media_type: "tv" }];
-                  });
-                }}
-              >
-                Add To Watchlist <TbFolderPlus color="#57EBDE" size={18} />
-              </button>
-              <a
-                href={`https://www.youtube.com/watch?v=${
-                  showData.videos.results.find(
-                    (v) => v.type.toLowerCase() === "trailer"
-                  )?.key || showData.videos.results[0]?.key
-                }`}
-                target="_blank"
-                style={{ textDecoration: "none" }}
-              >
-                <button>
-                  Watch Trailer <BiMoviePlay color="#57EBDE" size={18} />
-                </button>
-              </a>
-            </div>
+            <button
+              className="action-btn"
+              onClick={() => {
+                setWatchlist((prev) => {
+                  const exist = prev.some((item) => item.id === movieData.id);
+                  return exist
+                    ? prev.filter((item) => item.id !== movieData.id)
+                    : [...prev, { id: movieData.id, media_type: "movie" }];
+                });
+              }}
+              style={
+                watchlist.some((m) => m.id === movieData.id)
+                  ? {
+                      backgroundColor: "#57EBDE",
+                      color: "black",
+                      fontWeight: "bold",
+                    }
+                  : {}
+              }
+            >
+              {watchlist.some((m) => m.id === movieData.id)
+                ? "Remove From Watchlist"
+                : "Add To Watchlist"}{" "}
+              <TbFolderPlus
+                style={
+                  watchlist.some((m) => m.id === movieData.id)
+                    ? {
+                        color: "black",
+                      }
+                    : {}
+                }
+                color="#57EBDE"
+                size={18}
+              />
+            </button>
+          </div>
+
+          <div className="large-screen-trailer">
+            <p className="overview">
+              "{showData.name}" Official Trailer
+            </p>
+            <iframe
+              src={`https://www.youtube.com/embed/${trailerKey}`}
+              title="YouTube Trailer"
+              id="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            />
           </div>
         </div>
 
@@ -195,12 +222,24 @@ function ShowPage() {
             Release Date{" "}
             <p>
               {showData.first_air_date?.split("-")[0]} -{" "}
-              {showData.last_air_date?.split("-")[0] || 'Now'}
+              {showData.last_air_date?.split("-")[0] || "Now"}
             </p>
           </label>
           <label>
             Original Language <p>{showLanguageName}</p>
           </label>
+        </div>
+
+        <div className="small-screen-trailer">
+          <p className="overview">"{showData.name}" Official Trailer</p>
+          <iframe
+            src={`https://www.youtube.com/embed/${trailerKey}`}
+            title="YouTube Trailer"
+            id="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          />
         </div>
 
         <label className="overview">
