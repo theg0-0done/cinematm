@@ -241,7 +241,7 @@ function Home() {
     <section className="relative">
 
       {/* ── 1. HERO SLIDER ── */}
-      <div className="relative isolate w-full h-[700px] mt-[7vh] mb-8 overflow-hidden">
+      <div className="relative isolate w-full h-[800px] lg:h-[700px] lg:mt-[7vh] mb-8 overflow-hidden">
         {heroMovies.map((m, i) => (
           <div
             key={m.id || m.name}

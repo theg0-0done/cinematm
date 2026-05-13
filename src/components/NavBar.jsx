@@ -92,12 +92,12 @@ function NavBar() {
   const hasResults = searchResults && Object.values(searchResults).some((arr) => arr.length > 0);
 
   return (
-    <nav className={`fixed top-0 left-0 w-full px-[20px] py-[15px] md:px-[40px] md:py-[20px] flex justify-between items-center z-[1000] transition-all duration-300 ${open ? "bg-transparent" : "bg-[#080810]/20 backdrop-blur-[20px]"}`}>
-      <Link onClick={handleScroll} to="/" className="text-[1.8rem] font-extrabold text-[var(--text-main)] tracking-[1px] shrink-0">
+    <nav className={`fixed top-0 left-0 w-full px-[20px] py-[15px] md:px-[40px] md:py-[20px] flex justify-between items-center z-[1000] transition-all duration-300 ${open ? "lg:bg-transparent" : "lg:bg-[#080810]/20 lg:backdrop-blur-[20px]"}`}>
+      <Link onClick={handleScroll} to="/" className="text-[1.4rem] lg:text-[1.8rem] font-extrabold text-[var(--text-main)] tracking-[1px] shrink-0">
         Cinema<span className="text-[var(--accent-blue)]">TM</span>
       </Link>
 
-      <div className="hidden md:flex gap-[30px]">
+      <div className="hidden lg:flex gap-[30px]">
         {["Home,/", "Movies,/movies", "TV Shows,/tv-shows", "Watchlist,/watchlist"].map((item) => {
           const [label, to] = item.split(",");
           return (
@@ -108,7 +108,7 @@ function NavBar() {
         })}
       </div>
 
-      <div className="hidden md:flex gap-[12px] items-center">
+      <div className="hidden lg:flex gap-[12px] items-center">
         {/* Search toggle */}
         <div className="relative">
           <div className={`flex items-center gap-2 transition-all duration-300 ${searchOpen ? "w-[280px]" : "w-auto"}`}>
@@ -224,7 +224,7 @@ function NavBar() {
  
       {/* Mobile menu toggle (Arrow Icon) */}
       <button 
-        className="md:hidden flex items-center justify-center w-10 h-10 rounded-full bg-white/5 border border-white/10 z-[1002] transition-all hover:bg-white/10 active:scale-90"
+        className="lg:hidden flex items-center justify-center w-10 h-10 rounded-full bg-white/5 border border-white/10 z-[1002] transition-all hover:bg-white/10 active:scale-90"
         onClick={() => setOpen(!open)}
       >
         {open ? (
@@ -240,11 +240,11 @@ function NavBar() {
  
       {/* Mobile Sidebar (Glassy Drawer) */}
       <div 
-        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-[1000] transition-opacity duration-300 md:hidden ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-[1000] transition-opacity duration-300 lg:hidden ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
         onClick={() => setOpen(false)}
       />
       
-      <div className={`fixed top-0 right-0 w-[280px] h-screen bg-[#080810]/80 backdrop-blur-2xl border-l border-white/10 flex flex-col p-8 transition-transform duration-500 ease-out z-[1001] md:hidden ${open ? "translate-x-0 shadow-[-20px_0_40px_rgba(0,0,0,0.5)]" : "translate-x-full"}`}>
+      <div className={`fixed top-0 right-0 w-[75vw] md:w-[50vw] h-screen bg-[#080810]/80 backdrop-blur-2xl border-l border-white/10 flex flex-col p-8 transition-transform duration-500 ease-out z-[1001] lg:hidden ${open ? "translate-x-0 shadow-[-20px_0_40px_rgba(0,0,0,0.5)]" : "translate-x-full"}`}>
         {/* Sidebar Header */}
         <div className="mb-12 mt-4 flex items-center justify-between">
           <Link onClick={() => setOpen(false)} to="/" className="text-[1.5rem] font-extrabold text-white tracking-[1px]">

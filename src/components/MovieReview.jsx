@@ -85,21 +85,39 @@ function MovieReview({ movie, onPrev, onNext }) {
         {/* Rating + Year row */}
         <div className="flex items-center gap-3 mb-3 text-sm text-white">
           {rating && (
-            <span className="flex items-center gap-1 font-semibold">
+            <span className="flex items-center gap-1 font-semibold px-2 py-0.5 bg-white/10 border border-white/20 rounded-lg">
               <FaStar className="text-[#ffd700]" size={13} />
               {rating}
             </span>
           )}
+          •
           {year && (
-            <span className="px-2 py-0.5 bg-white/10 border border-white/20 rounded-[4px] text-xs font-medium">
+            <span className="px-2 py-0.5 bg-white/10 border border-white/20 rounded-lg text-sm font-medium">
               {year}
+            </span>
+          )}
+          •
+          {movie.media_type === "tv" && (
+            <span className="px-2 py-0.5 bg-white/10 border border-white/20 rounded-lg text-sm font-medium">
+              TV
+            </span>
+          )}
+          {movie.media_type === "movie" && (
+            <span className="px-2 py-0.5 bg-white/10 border border-white/20 rounded-lg text-sm font-medium">
+              Movie
+            </span>
+          )}
+          •
+          {genreNames.length > 0 && (
+            <span key={genreNames[0]} className="px-2 py-0.5 bg-white/10 border border-white/20 rounded-lg text-sm font-medium">
+              {genreNames[0]}
             </span>
           )}
         </div>
 
         {/* Genres ships */}
         {genreNames.length > 0 && (
-          <div className="flex gap-2 mb-3">
+          <div className="hidden lg:flex gap-2 mb-3">
             {genreNames.map((genre) => (
               <span key={genre} className="px-2 py-0.5 bg-white/10 border border-white/20 rounded-full text-xs font-medium">
                 {genre}

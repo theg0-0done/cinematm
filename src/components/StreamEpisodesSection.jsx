@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { FaStar } from "react-icons/fa";
+import { FaStar, FaPlay } from "react-icons/fa";
 
 export default function StreamEpisodesSection({ showId, showTitle, numberOfSeasons, imdbId }) {
   const [selectedSeason, setSelectedSeason] = useState(1);
@@ -71,6 +71,69 @@ export default function StreamEpisodesSection({ showId, showTitle, numberOfSeaso
   return (
     <div className="w-full flex flex-col gap-[24px]">
       <h2 className="text-[1.8rem] font-bold text-white border-l-4 border-[#00c3ff] pl-[15px] mb-2">Watch & Explore</h2>
+
+      {/* ── MOBILE LAYOUT (md:hidden) ── */}
+      <div className="md:hidden flex flex-col gap-6">
+         {/* Season Tabs */}
+         <div className="flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none]">
+             {Array.from({ length: numberOfSeasons || 1 }, (_, i) => i + 1).map(n => (
+                 <button key={n} onClick={() => { setSelectedSeason(n); setSelectedEpisode(1); }}
+                   className={`shrink-0 px-4 py-[6px] rounded-full text-[0.85rem] font-bold border transition-colors ${n === selectedSeason ? "bg-[#00c3ff] text-white border-[#00c3ff]" : "bg-transparent text-gray-400 border-white/20"}`}>
+                   Season {n}
+                 </button>
+             ))}
+         </div>
+
+         {/* Season Info Block */}
+         {seasonData && (
+            <div className="flex gap-4">
+               {seasonData.poster_path ? (
+                 <img src={`https://image.tmdb.org/t/p/w300${seasonData.poster_path}`} className="w-auto h-[180px] rounded-[12px] object-cover shadow-lg border border-white/10 shrink-0" />
+               ) : (
+                 <div className="w-[100px] aspect-[2/3] bg-white/5 rounded-[12px] border border-white/10 shrink-0" />
+               )}
+               <div className="flex flex-col gap-1">
+                 <h3 className="text-[1.2rem] font-bold text-white leading-tight">{seasonData.name || `Season ${selectedSeason}`}</h3>
+                 <div className="flex items-center gap-2 mt-1">
+                   {seasonData.vote_average > 0 && <span className="flex items-center gap-1 text-[0.85rem] font-bold"><FaStar className="text-[#ffd700]"/> {seasonData.vote_average.toFixed(1)}</span>}
+                   {seasonData.air_date && <span className="text-gray-400 text-[0.8rem]">{formatDate(seasonData.air_date)}</span>}
+                   {seasonData.episodes && <span className="px-2 py-[2px] bg-[#00c3ff]/10 text-[#00c3ff] rounded border border-[#00c3ff]/30 text-[0.7rem] font-bold uppercase">{seasonData.episodes.length} Episodes</span>}
+                 </div>
+                 {seasonData.overview && <p className="text-gray-400 text-[0.8rem] line-clamp-5 mt-1 leading-relaxed">{seasonData.overview}</p>}
+               </div>
+            </div>
+         )}
+
+         {/* Stream Player */}
+         <div ref={playerRef} className="relative w-full aspect-video rounded-[12px] overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/10 mt-2">
+            {imdbId ? (
+               <iframe key={`mobile-${showId}-${selectedSeason}-${selectedEpisode}`} src={`https://vaplayer.ru/embed/tv/${imdbId}/${selectedSeason}/${selectedEpisode}?autoplay=0`} className="w-full h-full border-none" allowFullScreen sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-popups"/>
+            ) : (
+               <div className="w-full h-full bg-black/40 flex items-center justify-center text-white/50 text-[0.9rem]">Stream unavailable</div>
+            )}
+            <select className="absolute top-2 right-2 max-w-[6rem] rounded-[6px] px-3 py-1 bg-black/30 border border-white/10 text-white">
+              {seasonData?.episodes?.map((ep) => (
+                <option key={ep.id} value={ep.episode_number}>
+                  {ep.episode_number}. {ep.name}
+                </option>
+              ))}
+            </select>
+         </div>
+
+         {/* Episode Info & Guests */}
+         <div className="flex flex-col gap-3">
+            <h3 className="text-[1.1rem] font-bold text-white">{episodeData?.name || `Episode ${selectedEpisode}`}</h3>
+            <div className="flex items-center gap-2 text-gray-400 text-sm">
+              {episodeData?.vote_average > 0 && <span className="flex items-center gap-1 text-[0.85rem] font-bold"><FaStar className="text-[#ffd700]"/>{episodeData?.vote_average?.toFixed(1)}</span>}             
+              {episodeData?.air_date && <span>• {formatDate(episodeData?.air_date)}</span>}  
+              {episodeData?.runtime > 0 && <span>• {episodeData?.runtime} min</span>}
+            </div>
+            <p className="text-[0.9rem] text-gray-300 leading-relaxed line-clamp-4">{episodeData?.overview || <span className="italic opacity-50">No overview available.</span>}</p>
+         </div>
+      </div>
+
+      {/* ── DESKTOP LAYOUT (hidden md:flex) ── */}
+      <div className="hidden md:flex flex-col gap-[24px]">
 
       {/* BLOCK 1: SEASON INFO HEADER */}
       <div className="flex flex-col md:flex-row gap-6 items-start w-full transition-opacity duration-300">
@@ -268,6 +331,7 @@ export default function StreamEpisodesSection({ showId, showTitle, numberOfSeaso
             </div>
           </div>
         )}
+      </div>
       </div>
     </div>
   );

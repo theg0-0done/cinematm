@@ -19,10 +19,10 @@ function Authentication() {
           WebkitMaskImage: "linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)"
         }}
       >
-        <div className="absolute inset-0 bg-black/60" />
+        <div className="absolute inset-0 bg-black/20" />
       </div>
 
-      <div className="relative z-10 w-full max-w-[450px] p-8 md:p-16 rounded-[4px] bg-black/50 backdrop-blur-[5px] rounded-xl flex flex-col gap-8 shadow-2xl">
+      <div className="relative z-10 w-full max-w-[450px] p-8 md:p-16 rounded-[4px] bg-black/40 backdrop-blur-[5px] rounded-xl flex flex-col gap-8 shadow-2xl">
         <h1 className="text-3xl font-bold text-white text-left">
           {isRegister ? "Sign Up" : "Sign In"}
         </h1>
@@ -43,7 +43,7 @@ function Authentication() {
               <input
                 type="password"
                 placeholder="Confirm Password"
-                className="w-full rounded-full border border-[var(--accent-blue)] bg-black/20 border-none text-white outline-none p-4 rounded-[4px] transition-all"
+                className="w-full rounded-full border border-[var(--accent-blue)] bg-black/20 text-white outline-none p-4 rounded-[4px] transition-all"
               />
             )}
           </div>
