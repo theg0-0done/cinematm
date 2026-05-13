@@ -1,24 +1,19 @@
+```javascript
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { CenimaContext } from "../context/CenimaContext";
+import { CinemaContext } from "../context/CinemaContext";
 import { FaStar } from "react-icons/fa";
 
 function MovieCard1({ movie }) {
-  const { formatDate } = useContext(CenimaContext);
+  const { formatDate } = useContext(CinemaContext);
 
   return (
     movie.poster_path && (
-      <div className="trend-movie">
+      <div className="flex flex-col gap-2 w-full max-w-[200px]">
         {movie.vote_average ? (
-          <p
-            className="rating"
-            style={{
-              display: "flex",
-              gap: "4px",
-            }}
-          >
+          <p className="flex items-center gap-1 text-sm font-bold bg-black/40 backdrop-blur-sm px-2 py-1 rounded-md w-fit">
             {(movie.vote_average / 2).toFixed(1)}
-            <FaStar color="yellow" />
+            <FaStar className="text-yellow-400" />
           </p>
         ) : (
           ""
@@ -26,27 +21,22 @@ function MovieCard1({ movie }) {
         <Link
           to={movie.media_type && `/${movie.media_type}/${movie.id}`}
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="overflow-hidden rounded-lg block"
         >
           <img
-            className="trend-movie-poster"
+            className="w-full aspect-[2/3] object-cover hover:scale-105 transition-transform duration-300"
             src={`https://image.tmdb.org/t/p/w342${movie.poster_path}`}
-            alt=""
+            alt={movie.title || movie.name}
           />
         </Link>
-        <p>{movie.title || movie.name}</p>
+        <p className="font-semibold text-sm truncate">{movie.title || movie.name}</p>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-          }}
-        >
+        <div className="flex justify-between flex-wrap text-xs text-white/80">
           {movie.air_date && (
-            <p style={{ opacity: "0.8" }}>{formatDate(movie.air_date)}</p>
+            <p>{formatDate(movie.air_date)}</p>
           )}
           {movie.episode_count && (
-            <p style={{ opacity: "0.8" }}>{movie.episode_count} Ep</p>
+            <p>{movie.episode_count} Ep</p>
           )}
         </div>
       </div>

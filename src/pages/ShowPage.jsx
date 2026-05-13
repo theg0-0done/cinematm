@@ -1,367 +1,296 @@
-import { useParams } from "react-router-dom";
-import ReactStars from "react-stars";
-import { BiMoviePlay } from "react-icons/bi";
-import { TbFolderPlus } from "react-icons/tb";
-import MovieCard1 from "../components/MovieCard1";
-import { API_KEY } from "../context/api";
-import { useState, useEffect, useContext } from "react";
-import EpisodeCard from "../components/EpisodeCard";
-import { IoIosArrowForward } from "react-icons/io";
-import { CenimaContext } from "../context/CenimaContext";
+import { useParams, Link } from "react-router-dom";
+import { FaStar, FaPlay, FaGlobe, FaTv } from "react-icons/fa";
+import { TbFolderPlus, TbFolderMinus } from "react-icons/tb";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import MovieCard from "../components/MovieCard";
+import ReviewsSection from "../components/ReviewsSection";
+import GallerySection from "../components/GallerySection";
+import Loading from "../components/Loading";
+import WatchProviders from "../components/WatchProviders";
+import CertificationBadge from "../components/CertificationBadge";
+import ImdbBadge from "../components/ImdbBadge";
+import StreamEpisodesSection from "../components/StreamEpisodesSection";
+import { useState, useEffect, useContext, useRef } from "react";
+import { CinemaContext } from "../context/CinemaContext";
+
+const SectionTitle = ({ children }) => (
+  <h2 className="text-[1.8rem] font-bold mb-[20px] text-white border-l-4 border-[#00c3ff] pl-[15px]">{children}</h2>
+);
+
+function formatStatValue(n) {
+  if (n === null || n === undefined || n === 0 || n === "") return "N/A";
+  if (typeof n === "number") {
+    if (n >= 1e6) return +(n / 1e6).toFixed(1) + "M";
+    if (n >= 1e3) return +(n / 1e3).toFixed(1) + "K";
+  }
+  return n;
+}
+
+const STATUS_STYLE = {
+  "Returning Series": "bg-emerald-500/15 border-emerald-500/40 text-emerald-400",
+  "Ended":           "bg-gray-500/15  border-gray-500/40  text-gray-400",
+  "Canceled":        "bg-red-500/15   border-red-500/40   text-red-400",
+  "In Production":   "bg-blue-500/15  border-blue-500/40  text-blue-400",
+};
 
 function ShowPage() {
   const [showData, setShowData] = useState(null);
   const { id } = useParams();
-  const { setWatchlist, watchlist } = useContext(CenimaContext);
+  const { setWatchlist, watchlist, formatDate, addRecentlyWatched } = useContext(CinemaContext);
+  const castRef    = useRef(null);
+  const similarRef = useRef(null);
+  const recsRef    = useRef(null);
+
+  const scroll = (ref, dir) => ref.current?.scrollBy({ left: dir === "left" ? -ref.current.clientWidth * 0.8 : ref.current.clientWidth * 0.8, behavior: "smooth" });
 
   useEffect(() => {
     const fetchShow = async () => {
       try {
-        const response = await fetch(
-          `https://api.themoviedb.org/3/tv/${id}?api_key=${API_KEY}&append_to_response=videos,images,reviews,similar,recommendations,aggregate_credits`
+        const apiKey = import.meta.env.VITE_TMDB_API_KEY;
+        const res = await fetch(
+          `https://api.themoviedb.org/3/tv/${id}?api_key=${apiKey}&append_to_response=videos,images,reviews,similar,recommendations,aggregate_credits,external_ids,keywords,content_ratings`
         );
+        if (!res.ok) throw new Error("fetch failed");
+        const data = await res.json();
 
-        if (!response.ok) throw new Error("Could not fetch resource.");
-
-        const data = await response.json();
-
-        // ---- Fetch all seasons & episodes ----
-        const seasonRequests = data.seasons.map((s) =>
-          fetch(
-            `https://api.themoviedb.org/3/tv/${id}/season/${s.season_number}?api_key=${API_KEY}`
-          ).then((r) => r.json())
-        );
-
-        const seasonsWithEpisodes = await Promise.all(seasonRequests);
-
-        // ---- Save everything ----
-        setShowData({
+        const enrichedData = {
           ...data,
-          seasons_full: seasonsWithEpisodes, // <– all episodes for all seasons
-
-          similar: {
-            ...data.similar,
-            results:
-              data.similar?.results?.map((m) => ({ ...m, media_type: "tv" })) ||
-              [],
-          },
-
-          recommendations: {
-            ...data.recommendations,
-            results:
-              data.recommendations?.results?.map((m) => ({
-                ...m,
-                media_type: "tv",
-              })) || [],
-          },
+          media_type: "tv",
+          similar:         { ...data.similar,         results: data.similar?.results?.map(m => ({ ...m, media_type: "tv" })) || [] },
+          recommendations: { ...data.recommendations, results: data.recommendations?.results?.map(m => ({ ...m, media_type: "tv" })) || [] },
+        };
+        setShowData(enrichedData);
+        addRecentlyWatched({
+          id: enrichedData.id,
+          title: enrichedData.name, // Note: TV shows use 'name' instead of 'title'
+          poster_path: enrichedData.poster_path,
+          backdrop_path: enrichedData.backdrop_path,
+          media_type: "tv"
         });
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (e) { console.error(e); }
     };
-
     if (id) fetchShow();
+    window.scrollTo(0, 0);
   }, [id]);
 
-  if (!showData)
-    return (
-      <p
-        style={{
-          marginBlock: "20rem",
-          textAlign: "center",
-          color: "white",
-        }}
-      >
-        Loading...
-      </p>
-    );
+  if (!showData) return <Loading />;
 
-  const showLanguageName = new Intl.DisplayNames(["en"], {
-    type: "language",
-  }).of(showData.original_language);
+  const showLangName = new Intl.DisplayNames(["en"], { type: "language" }).of(showData.original_language);
+  const showCountry  = showData.origin_country?.length
+    ? showData.origin_country.map(c => new Intl.DisplayNames(["en"], { type: "region" }).of(c)) : ["Unknown"];
 
-  const showCountry = showData.origin_country?.length
-    ? showData.origin_country.map((code) =>
-        new Intl.DisplayNames(["en"], { type: "region" }).of(code)
-      )
-    : ["Unknown"];
+  const trailerVideo = showData.videos?.results?.find(v => v.type.toLowerCase() === "trailer");
+  const trailerKey   = trailerVideo?.key || showData.videos?.results?.[0]?.key;
+  const trailerTitle = trailerVideo?.name || null;
 
-    const trailerKey =
-      showData.videos.results.find((v) => v.type.toLowerCase() === "trailer")
-        ?.key || showData.videos.results[0]?.key;
+  const inWatchlist = watchlist.some(m => m.id === showData.id);
+  const toggleWatchlist = () => setWatchlist(prev =>
+    inWatchlist ? prev.filter(item => item.id !== showData.id) : [...prev, { id: showData.id, media_type: "tv" }]
+  );
+
+  const keywords       = showData.keywords?.results?.slice(0, 10) || [];
+  const contentRating  = showData.content_ratings?.results?.find(r => r.iso_3166_1 === "US")?.rating;
+  const creators       = showData.created_by?.map(c => c.name).join(", ");
+  const showLogo       = showData.images?.logos?.find(l => l.iso_639_1 === "en")?.file_path || showData.images?.logos?.[0]?.file_path;
+  const imdbId         = showData.external_ids?.imdb_id || null;
+  const statusStyle    = STATUS_STYLE[showData.status] || "bg-gray-500/15 border-gray-500/40 text-gray-400";
+  const epRuntime      = showData.episode_run_time?.[0] || null;
+  const primaryNetwork = showData.networks?.[0] || null;
+  const showStats = [
+    { label: "Seasons", value: formatStatValue(showData.number_of_seasons), mobile: true },
+    { label: "Episodes", value: formatStatValue(showData.number_of_episodes), mobile: true },
+    { label: "Country", value: showCountry[0] || "N/A", mobile: false },
+    { label: "Premiered", value: showData.first_air_date ? showData.first_air_date.split("-")[0] : "N/A", mobile: true },
+  ];
 
   return (
-    <section className="movie-page">
-      <div
-        className="movie-page-background"
-        style={{
-          backgroundImage: `url(https://image.tmdb.org/t/p/w780${
-            showData.images.backdrops.find((b) => b.iso_639_1 === "en")
-              ?.file_path || showData.images.backdrops[0]?.file_path
-          })`,
-        }}
-      />
-      <div className="movie-page-container">
-        <div className="movie-page-details">
-          <img
-            src={`https://image.tmdb.org/t/p/w780${showData.poster_path}`}
-            alt={showData.name}
-          />
+    <section className="relative min-h-screen w-full bg-transparent text-white pt-[80px] overflow-x-hidden">
+      {showData.backdrop_path && (
+        <div className="absolute top-0 left-0 w-full h-[600px] bg-cover bg-top bg-no-repeat opacity-40 z-0 [mask-image:linear-gradient(to_bottom,rgba(0,0,0,1)_50%,rgba(0,0,0,0)_100%)] [-webkit-mask-image:linear-gradient(to_bottom,rgba(0,0,0,1)_50%,rgba(0,0,0,0)_100%)]"
+          style={{ backgroundImage: `url(https://image.tmdb.org/t/p/original${showData.backdrop_path})` }}/>
+      )}
 
-          <div className="movie-page-details2">
-            <h1>{showData.name}</h1>
-            <h4>{showData.tagline}</h4>
+      <div className="relative z-10 max-w-[1200px] mx-auto px-[5%] pt-[200px] pb-[40px] flex flex-col gap-[36px]">
 
-            <div className="large-screen-elements">
-              <p className="overview">Genres:</p>
-              <div className="genres-container">
-                {showData.genres?.map((genre) => (
-                  <button key={genre.id}>{genre.name}</button>
+        {/* ── Title ── */}
+        <div className="flex flex-col items-center text-center gap-[12px]">
+          {showLogo
+            ? <img src={`https://image.tmdb.org/t/p/w500${showLogo}`} alt={showData.name} className="max-w-[80%] md:max-w-[450px] max-h-[180px] object-contain drop-shadow-[0_0_30px_rgba(0,0,0,0.5)] mb-2"/>
+            : <h1 className="text-[3.5rem] md:text-[2.5rem] font-extrabold m-0 leading-[1.1] text-white drop-shadow-lg">{showData.name}</h1>}
+          {showData.tagline && <p className="text-gray-400 italic text-[1rem] m-0">"{showData.tagline}"</p>}
+          <div className="flex items-center gap-[10px] text-[#ffd700] text-[1.1rem] font-bold">
+            <FaStar/> {showData.vote_average.toFixed(1)}/10
+            <span className="text-gray-500 text-[0.85rem] font-normal">({showData.vote_count?.toLocaleString()} votes)</span>
+          </div>
+          <div className="flex flex-wrap justify-center items-center gap-[10px] text-gray-300 text-[0.9rem]">
+            {showData.first_air_date && <span>{showData.first_air_date.split("-")[0]} – {showData.last_air_date?.split("-")[0] || "Present"}</span>}
+            <span className="text-gray-600">·</span>
+            <span>{showLangName}</span>
+            <span className="text-gray-600">·</span>
+            {/* Colored status badge */}
+            <span className={`px-[10px] py-[2px] rounded-full border text-[0.8rem] font-semibold ${statusStyle}`}>{showData.status}</span>
+            {contentRating && <CertificationBadge certification={contentRating}/>}
+          </div>
+        </div>
+        <div className="w-full h-[1px] bg-white/10"/>
+
+        {/* ── Poster + Details ── */}
+        <div className="flex flex-col md:flex-row gap-[40px] md:items-start">
+          <div className="w-full md:w-[280px] shrink-0 flex justify-center md:block">
+            {showData.poster_path
+              ? <img src={`https://image.tmdb.org/t/p/w500${showData.poster_path}`} alt={showData.name} className="w-[250px] md:w-full rounded-[12px] shadow-[0_10px_30px_rgba(0,0,0,0.8)]"/>
+              : <div className="w-[250px] md:w-full aspect-[2/3] bg-[#333] rounded-[12px]"/>}
+          </div>
+
+          <div className="flex-1 flex flex-col gap-[18px] text-center md:text-left">
+            <div className="hidden text-[0.9rem] text-gray-400 lg:flex flex-col gap-[6px]">
+              {creators && <p><span className="font-bold text-white">Created by:</span> {creators}</p>}
+
+              {/* Network pill with logo */}
+              {primaryNetwork && (
+                <div className="flex items-center gap-2 justify-center md:justify-start">
+                  <span className="font-bold text-white">Network:</span>
+                  <div className="flex items-center gap-2 px-3 py-[5px] rounded-full bg-white/[0.05] border border-white/10">
+                    {primaryNetwork.logo_path
+                      ? <img src={`https://image.tmdb.org/t/p/w92${primaryNetwork.logo_path}`} alt={primaryNetwork.name} className="h-[16px] w-auto object-contain brightness-0 invert opacity-70"/>
+                      : <span className="text-gray-300 text-[0.8rem]">{primaryNetwork.name}</span>}
+                  </div>
+                  {showData.networks?.length > 1 && <span className="text-gray-600 text-[0.8rem]">+{showData.networks.length - 1} more</span>}
+                </div>
+              )}
+
+              {epRuntime && <p><span className="font-bold text-white">Episode Runtime:</span> ~{epRuntime} min / episode</p>}
+
+              {showData.aggregate_credits?.cast?.length > 0 && (
+                <p><span className="font-bold text-white">Cast:</span>{" "}
+                  {showData.aggregate_credits.cast.filter(c => c.known_for_department === "Acting").slice(0, 5).map(c => c.name).join(", ")}
+                </p>
+              )}
+            </div>
+
+            <p className="text-[1rem] leading-[1.8] text-gray-300">{showData.overview}</p>
+
+            {/* Genre tags */}
+            <div className="flex flex-wrap gap-[8px] justify-center md:justify-start">
+              {showData.genres?.map(g => <span key={g.id} className="border border-white/30 px-[18px] py-[5px] rounded-full text-[0.85rem] text-gray-300 hover:bg-[#00c3ff] hover:border-[#00e1ff] hover:text-white cursor-default transition-colors">{g.name}</span>)}
+            </div>
+
+            {/* Keyword chips */}
+            {keywords.length > 0 && (
+              <div className="hidden lg:flex flex-wrap gap-[6px] justify-center md:justify-start">
+                {keywords.map(kw => (
+                  <Link key={kw.id} to={`/tv-shows?with_keywords=${kw.id}&keyword_name=${encodeURIComponent(kw.name)}`}
+                    onClick={() => window.scrollTo({top:0,behavior:"smooth"})}
+                    className="px-[12px] py-[3px] rounded-full text-[0.75rem] font-medium border border-white/10 text-gray-500 bg-white/[0.03] hover:bg-[#00c3ff]/10 hover:border-[#00c3ff]/30 hover:text-[#00c3ff] transition-all no-underline">
+                    #{kw.name}
+                  </Link>
                 ))}
               </div>
-            </div>
-
-            {showData.vote_average ? (
-              <ReactStars
-                className="movie-page-rating"
-                count={5}
-                size={24}
-                value={showData.vote_average / 2}
-                isHalf={true}
-                edit={false}
-                activeColor="yellow"
-                color="rgba(255,255,255,0.3)"
-              />
-            ) : (
-              <p>Unavailable</p>
             )}
 
-            <button
-              className="action-btn"
-              onClick={() => {
-                setWatchlist((prev) => {
-                  const exist = prev.some((item) => item.id === movieData.id);
-                  return exist
-                    ? prev.filter((item) => item.id !== movieData.id)
-                    : [...prev, { id: movieData.id, media_type: "movie" }];
-                });
-              }}
-              style={
-                watchlist.some((m) => m.id === movieData.id)
-                  ? {
-                      backgroundColor: "#57EBDE",
-                      color: "black",
-                      fontWeight: "bold",
-                    }
-                  : {}
-              }
-            >
-              {watchlist.some((m) => m.id === movieData.id)
-                ? "Remove From Watchlist"
-                : "Add To Watchlist"}{" "}
-              <TbFolderPlus
-                style={
-                  watchlist.some((m) => m.id === movieData.id)
-                    ? {
-                        color: "black",
-                      }
-                    : {}
-                }
-                color="#57EBDE"
-                size={18}
-              />
-            </button>
-          </div>
-
-          <div className="large-screen-trailer">
-            <p className="overview">
-              "{showData.name}" Official Trailer
-            </p>
-            <iframe
-              src={`https://www.youtube.com/embed/${trailerKey}`}
-              title="YouTube Trailer"
-              id="lazy"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            />
-          </div>
-        </div>
-
-        <div className="small-screen-elements">
-          <p className="overview">Genres:</p>
-          <div className="genres-container">
-            {showData.genres?.map((genre) => (
-              <button key={genre.id}>{genre.name}</button>
-            ))}
-          </div>
-        </div>
-
-        <div className="labels-container">
-          <label>
-            Status <p>{showData.status}</p>
-          </label>
-          <label>
-            Seasons Count <p>{showData.number_of_seasons} Seasons</p>
-          </label>
-          <label>
-            Episodes Count <p>{showData.number_of_episodes} Ep</p>
-          </label>
-        </div>
-
-        <div className="labels-container">
-          <label>
-            Origin Country{" "}
-            {showCountry.map((c) => (
-              <p key={c} style={{ marginBottom: 0 }}>
-                {c}
-              </p>
-            ))}
-          </label>
-          <label>
-            Release Date{" "}
-            <p>
-              {showData.first_air_date?.split("-")[0]} -{" "}
-              {showData.last_air_date?.split("-")[0] || "Now"}
-            </p>
-          </label>
-          <label>
-            Original Language <p>{showLanguageName}</p>
-          </label>
-        </div>
-
-        <div className="small-screen-trailer">
-          <p className="overview">"{showData.name}" Official Trailer</p>
-          <iframe
-            src={`https://www.youtube.com/embed/${trailerKey}`}
-            title="YouTube Trailer"
-            id="lazy"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen
-          />
-        </div>
-
-        <label className="overview">
-          Overview:
-          <p>{showData.overview}</p>
-        </label>
-
-        <>
-          <p className="overview">Show's Seasons:</p>
-
-          {showData.seasons.length > 0 ? (
-            <div>
-              {showData.seasons.map((s) => {
-                return (
-                  s.poster_path && (
-                    <div className="season-container">
-                      <MovieCard1 key={s.id} movie={s} />
-                      <div className="ep-outer-container">
-                        <div className="ep-container">
-                          {showData.seasons_full
-                            .find((season) => season.id === s.id)
-                            .episodes.map((ep) => (
-                              <EpisodeCard ep={ep} />
-                            ))}
-                        </div>
-                        <IoIosArrowForward className="ep-arrow" size={20} />
-                      </div>
-                    </div>
-                  )
-                );
-              })}
+            {/* Action buttons */}
+            <div className="flex gap-[12px] mt-[6px] justify-center md:justify-start flex-wrap">
+              {trailerKey && <a href={`https://www.youtube.com/watch?v=${trailerKey}`} target="_blank" rel="noreferrer" className="flex items-center gap-[10px] px-[22px] py-[10px] rounded-full font-semibold text-[0.9rem] border border-white/20 hover:bg-white hover:text-[#0b0c10] transition-all no-underline text-white"><FaPlay size={12}/> Watch Trailer</a>}
+              <button className={`flex items-center gap-[10px] px-[22px] py-[10px] rounded-full font-semibold text-[0.9rem] cursor-pointer transition-all duration-300 border ${inWatchlist?"bg-[#00c3ff] text-white border-[#00e1ff]":"bg-transparent border-white/20 text-white hover:bg-white/10"}`} onClick={toggleWatchlist}>
+                {inWatchlist ? <><TbFolderMinus size={18}/> Remove</> : <><TbFolderPlus size={18}/> Watchlist</>}
+              </button>
+              {showData.homepage && <a href={showData.homepage} target="_blank" rel="noreferrer" className="flex items-center gap-[8px] px-[22px] py-[10px] rounded-full font-semibold text-[0.9rem] border border-white/20 text-white hover:bg-white/10 transition no-underline"><FaGlobe size={13}/> Official Site</a>}
+              <ImdbBadge imdbId={imdbId} variant="title"/>
             </div>
-          ) : (
-            <p>No Seasons Available</p>
-          )}
-        </>
+          </div>
+        </div>
 
-        {showData.created_by.length ? (
-          <div>
-            <p className="overview">Created By:</p>
-            <div className="cast-container">
-              {showData.created_by.map(
-                (actor) =>
-                  actor.profile_path && (
-                    <div className="movie-cast" key={actor.id}>
-                      <img
-                        src={`https://image.tmdb.org/t/p/w1280${actor.profile_path}`}
-                        alt={actor.name}
-                      />
-                      <p>{actor.name}</p>
-                    </div>
-                  )
+        {/* ── Bold Stats Row ── */}
+        <div className="w-full py-10 border-y border-white/[0.08] flex justify-evenly items-center gap-4">
+          {showStats.map((stat, idx) => (
+            <div key={stat.label} className={`items-center gap-4 ${stat.mobile ? "flex" : "hidden sm:flex"} flex-1 justify-center`}>
+              <div className="flex flex-col items-center text-center">
+                <span className={`font-black text-[#00c3ff] leading-none tracking-tighter drop-shadow-[0_0_20px_rgba(0,195,255,0.3)] ${stat.value.toString().length > 10 ? "text-[clamp(1.1rem,2vw,1.5rem)]" : "text-[clamp(1.4rem,3vw,2.5rem)]"}`}>
+                  {stat.value}
+                </span>
+                <span className="text-[0.65rem] text-white/45 font-bold uppercase tracking-[0.15em] mt-3">
+                  {stat.label}
+                </span>
+              </div>
+              {idx < showStats.length - 1 && (
+                <div className={`h-12 w-[1px] bg-white/10 ml-auto ${showStats[idx+1].mobile ? "" : "hidden sm:block"}`} />
               )}
             </div>
-          </div>
-        ) : null}
+          ))}
+        </div>
 
-        <div>
-          <p className="overview">Cast:</p>
-          <div className="cast-container">
-            {showData.aggregate_credits?.cast
-              .filter((c) => c.known_for_department === "Acting")
-              .map(
-                (actor) =>
-                  actor.profile_path && (
-                    <div className="movie-cast" key={actor.id}>
-                      <img
-                        src={`https://image.tmdb.org/t/p/w1280${actor.profile_path}`}
-                        alt={actor.name}
-                      />
-                      <p>{actor.name}</p>
-                      <p style={{ color: "grey" }}>
-                        "{actor.roles[0].character}"
-                      </p>
+        {/* ── Stream & Episodes Section ── */}
+        <StreamEpisodesSection 
+          showId={showData.id} 
+          showTitle={showData.name} 
+          numberOfSeasons={showData.number_of_seasons} 
+          imdbId={showData.external_ids?.imdb_id} 
+        />
+
+        {/* ── Top Cast ── */}
+        {showData.aggregate_credits?.cast?.length > 0 && (
+          <div className="relative group">
+            <SectionTitle>Top Cast</SectionTitle>
+            <div className="relative">
+              <button className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-[#00c3ff] text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all cursor-pointer border border-white/10" onClick={() => scroll(castRef,"left")}><IoIosArrowBack size={20}/></button>
+              <div className="flex gap-[16px] overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden scroll-smooth" ref={castRef}>
+                {showData.aggregate_credits.cast.filter(c => c.known_for_department === "Acting").slice(0,15).map(actor => actor.profile_path && (
+                  <Link to={`/actor/${actor.id}`} className="relative shrink-0 w-[180px] rounded-[18px] overflow-hidden group/cast cursor-pointer border border-white/5 transition-all duration-300 hover:border-[#00c3ff]/30 hover:shadow-[0_12px_30px_rgba(0,0,0,0.6)]" key={actor.id}>
+                    <img src={`https://image.tmdb.org/t/p/w342${actor.profile_path}`} alt={actor.name} className="w-full h-full object-cover transition-transform duration-700 group-hover/cast:scale-110"/>
+                    <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-[10px] py-[4px] rounded-[8px] text-[0.65rem] font-bold text-black shadow-lg uppercase tracking-tight">Actor</div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0b0c10] via-black/20 to-transparent flex flex-col justify-end p-4">
+                      <div className="font-bold text-[0.95rem] text-white leading-tight">{actor.name}</div>
+                      <div className="text-gray-400 text-[0.75rem] font-medium mt-1 truncate opacity-80 group-hover/cast:opacity-100 transition-opacity">{actor.roles?.[0]?.character}</div>
                     </div>
-                  )
-              )}
-          </div>
-        </div>
-
-        <div>
-          <p className="overview">Reviews:</p>
-          <div className="reviews-container">
-            {showData.reviews?.results?.length ? (
-              showData.reviews.results.map((review, index) => (
-                <div className="review" key={review.id || index}>
-                  <p style={{ fontWeight: "bold" }}>{review.author}</p>
-                  <p>{review.content}</p>
-                </div>
-              ))
-            ) : (
-              <p>No Reviews</p>
-            )}
-          </div>
-        </div>
-
-        <div>
-          <p className="overview">Similar to "{showData.name}"</p>
-          {showData.similar.results.length > 1 ? (
-            <div className="trend-movieS">
-              {showData.similar.results.map((movie) => {
-                return <MovieCard1 key={movie.id} movie={movie} />;
-              })}
+                  </Link>
+                ))}
+              </div>
+              <button className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-[#00c3ff] text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all cursor-pointer border border-white/10" onClick={() => scroll(castRef,"right")}><IoIosArrowForward size={20}/></button>
             </div>
-          ) : (
-            <p>No Similars Available</p>
-          )}
-        </div>
+          </div>
+        )}
 
-        <div>
-          <p className="overview">You Might Like As Well:</p>
+        {/* ── Gallery ── */}
+        <GallerySection images={showData.images}/>
 
-          {showData.recommendations.results.length > 1 ? (
-            <div className="trend-movieS">
-              {showData.recommendations.results.map((movie) => {
-                return <MovieCard1 key={movie.id} movie={movie} />;
-              })}
+        {/* ── Reviews ── */}
+        <ReviewsSection reviews={showData.reviews?.results}/>
+
+        {/* ── More Like This ── */}
+        {showData.similar?.results?.length > 0 && (
+          <div className="relative group">
+            <SectionTitle>More Like This</SectionTitle>
+            <div className="relative">
+              <button className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-[#00c3ff] text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all cursor-pointer border border-white/10" onClick={() => scroll(similarRef,"left")}><IoIosArrowBack size={20}/></button>
+              <div className="flex gap-[20px] overflow-x-auto pb-[12px] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden scroll-smooth" ref={similarRef}>
+                {showData.similar.results.filter(s => s.poster_path).map((s) => (
+                  <div key={s.id} className="min-w-[160px] w-[160px]">
+                    <MovieCard movie={s} layout="vertical" />
+                  </div>
+                ))}
+              </div>
+              <button className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-[#00c3ff] text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all cursor-pointer border border-white/10" onClick={() => scroll(similarRef,"right")}><IoIosArrowForward size={20}/></button>
             </div>
-          ) : (
-            <p>No Recommendations Available</p>
-          )}
-        </div>
+          </div>
+        )}
+
+        {/* ── Recommended For You ── */}
+        {showData.recommendations?.results?.length > 0 && (
+          <div className="relative group">
+            <SectionTitle>Recommended For You</SectionTitle>
+            <div className="relative">
+              <button className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-[#00c3ff] text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all cursor-pointer border border-white/10" onClick={() => scroll(recsRef,"left")}><IoIosArrowBack size={20}/></button>
+              <div className="flex gap-[20px] overflow-x-auto pb-[12px] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden scroll-smooth" ref={recsRef}>
+                {showData.recommendations.results.filter(s => s.poster_path).map((s) => (
+                  <div key={s.id} className="min-w-[160px] w-[160px]">
+                    <MovieCard movie={s} layout="vertical" />
+                  </div>
+                ))}
+              </div>
+              <button className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-[#00c3ff] text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all cursor-pointer border border-white/10" onClick={() => scroll(recsRef,"right")}><IoIosArrowForward size={20}/></button>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
