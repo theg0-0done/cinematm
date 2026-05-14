@@ -23,6 +23,7 @@ function NavBar() {
   const [debouncedQuery, setDebouncedQ]   = useState("");
   const [searchResults, setSearchResults] = useState(null); // null = not searched yet
   const [searching, setSearching]         = useState(false);
+  const [scrolled, setScrolled]           = useState(false);
 
   const inputRef     = useRef(null);
   const dropdownRef  = useRef(null);
@@ -72,6 +73,12 @@ function NavBar() {
     };
   }, []);
 
+  useEffect(() => {
+    const handleScrollState = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScrollState);
+    return () => window.removeEventListener("scroll", handleScrollState);
+  }, []);
+
   const openSearch = () => {
     setSearchOpen(true);
     setTimeout(() => inputRef.current?.focus(), 50);
@@ -92,7 +99,21 @@ function NavBar() {
   const hasResults = searchResults && Object.values(searchResults).some((arr) => arr.length > 0);
 
   return (
-    <nav className={`fixed top-0 left-0 w-full px-[20px] py-[15px] md:px-[40px] md:py-[20px] flex justify-between items-center z-[1000] transition-all duration-300 ${open ? "lg:bg-transparent" : "lg:bg-[#080810]/20 lg:backdrop-blur-[20px]"}`}>
+    <nav className="fixed top-0 left-0 w-full px-[20px] py-[15px] md:px-[40px] md:py-[18px] flex justify-between items-center z-[1000] transition-all duration-500">
+      {/* Premium Faded Background Layer */}
+      <div 
+        className={`absolute top-0 left-0 w-full h-[140%] -z-10 transition-all duration-500 pointer-events-none
+          ${scrolled ? "backdrop-blur-xl opacity-100" : "opacity-100"} 
+          bg-gradient-to-b from-black/95 via-black/50 to-transparent`}
+        style={scrolled ? {
+          WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 60%, transparent 100%)",
+          maskImage: "linear-gradient(to bottom, black 0%, black 60%, transparent 100%)"
+        } : {}}
+      />
+      
+      {/* Subtle border bottom (only visible on scroll) */}
+      {/* <div className={`absolute bottom-0 left-0 w-full h-[1px] bg-white/10 transition-opacity duration-500 pointer-events-none ${scrolled ? "opacity-100" : "opacity-0"}`} /> */}
+
       <Link onClick={handleScroll} to="/" className="text-[1.4rem] lg:text-[1.8rem] font-extrabold text-[var(--text-main)] tracking-[1px] shrink-0">
         Cinema<span className="text-[var(--accent-blue)]">TM</span>
       </Link>
@@ -102,7 +123,7 @@ function NavBar() {
           const [label, to] = item.split(",");
           return (
             <Link key={to} onClick={handleScroll}
-              className="text-[var(--text-muted)] text-[1rem] font-medium transition-colors duration-300 relative hover:text-[var(--text-main)] after:content-[''] after:absolute after:w-0 after:h-[2px] after:bg-[var(--accent-blue)] after:-bottom-1 after:left-0 after:transition-all after:duration-300 hover:after:w-full"
+              className="text-[var(--text-muted)] text-[1rem] font-medium transition-colors duration-300 relative lg:hover:text-[var(--text-main)] after:content-[''] after:absolute after:w-0 after:h-[2px] after:bg-[var(--accent-blue)] after:-bottom-1 after:left-0 after:transition-all after:duration-300 lg:hover:after:w-full"
               to={to}>{label}</Link>
           );
         })}
@@ -123,14 +144,14 @@ function NavBar() {
                   placeholder="Search movies, shows, people..."
                   className="flex-1 bg-transparent border-none outline-none text-white text-[0.9rem] placeholder:text-gray-500"
                 />
-                <button onClick={closeSearch} className="text-gray-500 hover:text-white transition-colors cursor-pointer ml-2">
+                <button onClick={closeSearch} className="text-gray-500 lg:hover:text-white transition-colors cursor-pointer ml-2">
                   <FaTimes size={13} />
                 </button>
               </div>
             ) : (
               <button
                 onClick={openSearch}
-                className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors cursor-pointer px-3 py-[6px] rounded-full border border-transparent hover:border-white/10 hover:bg-white/5"
+                className="flex items-center gap-2 text-gray-400 lg:hover:text-white transition-colors cursor-pointer px-3 py-[6px] rounded-full border border-transparent lg:hover:border-white/10 lg:hover:bg-white/5"
               >
                 <IoSearchOutline size={18} />
                 <span className="text-[0.88rem] font-medium">Search</span>
@@ -176,7 +197,7 @@ function NavBar() {
                             <button
                               key={item.id}
                               onClick={() => handleResultClick(item)}
-                              className="w-full flex items-center gap-3 px-3 py-[10px] rounded-[12px] hover:bg-white/[0.06] transition-all cursor-pointer text-left group/result"
+                              className="w-full flex items-center gap-3 px-3 py-[10px] rounded-[12px] lg:hover:bg-white/[0.06] transition-all cursor-pointer text-left group/result"
                             >
                               {/* Thumbnail */}
                               <div className="w-[36px] h-[52px] rounded-[6px] overflow-hidden bg-white/5 border border-white/5 shrink-0">
@@ -196,7 +217,7 @@ function NavBar() {
 
                               {/* Text */}
                               <div className="flex-1 min-w-0">
-                                <div className="text-white text-[0.88rem] font-semibold truncate group-hover/result:text-[#00c3ff] transition-colors">
+                                <div className="text-white text-[0.88rem] font-semibold truncate lg:group-hover/result:text-[#00c3ff] transition-colors">
                                   {title}
                                 </div>
                                 <div className="flex items-center gap-2 mt-[2px]">
@@ -219,12 +240,12 @@ function NavBar() {
         </div>
 
         <Link onClick={handleScroll} className="text-[var(--text-main)] font-medium" to="/authenticate/log-in">Log In</Link>
-        <Link onClick={handleScroll} className="bg-[var(--accent-blue)] text-white px-[20px] py-[8px] rounded-[20px] font-semibold transition-colors duration-300 hover:bg-[var(--accent-hover)]" to="/authenticate/register">Register</Link>
+        <Link onClick={handleScroll} className="bg-[var(--accent-blue)] text-white px-[20px] py-[8px] rounded-[20px] font-semibold transition-colors duration-300 lg:hover:bg-[var(--accent-hover)]" to="/authenticate/register">Register</Link>
       </div>
  
       {/* Mobile menu toggle (Arrow Icon) */}
       <button 
-        className="lg:hidden flex items-center justify-center w-10 h-10 rounded-full bg-white/5 border border-white/10 z-[1002] transition-all hover:bg-white/10 active:scale-90"
+        className="lg:hidden flex items-center justify-center w-10 h-10 rounded-full bg-white/5 border border-white/10 z-[1002] transition-all lg:hover:bg-white/10 active:scale-90"
         onClick={() => setOpen(!open)}
       >
         {open ? (
@@ -262,7 +283,7 @@ function NavBar() {
           ].map((link) => (
             <Link 
               key={link.to}
-              className="text-[1.1rem] font-medium text-gray-300 hover:text-[#00c3ff] transition-colors"
+              className="text-[1.1rem] font-medium text-gray-300 lg:hover:text-[#00c3ff] transition-colors"
               onClick={() => setOpen(false)} 
               to={link.to}
             >
@@ -274,14 +295,14 @@ function NavBar() {
         {/* CTA Buttons (Bottom) */}
         <div className="mt-auto flex flex-col gap-4 pb-4">
           <Link 
-            className="w-full py-3 text-center text-white font-medium border border-white/10 rounded-full bg-white/5 hover:bg-white/10 transition-all" 
+            className="w-full py-3 text-center text-white font-medium border border-white/10 rounded-full bg-white/5 lg:hover:bg-white/10 transition-all" 
             onClick={() => setOpen(false)} 
             to="/authenticate/log-in"
           >
             Log in
           </Link>
           <Link 
-            className="w-full py-3 text-center text-white font-bold rounded-full bg-[#00c3ff] shadow-[0_8px_20px_rgba(0,195,255,0.3)] hover:bg-[#00d8ff] transition-all" 
+            className="w-full py-3 text-center text-white font-bold rounded-full bg-[#00c3ff] shadow-[0_8px_20px_rgba(0,195,255,0.3)] lg:hover:bg-[#00d8ff] transition-all" 
             onClick={() => setOpen(false)} 
             to="/authenticate/register"
           >

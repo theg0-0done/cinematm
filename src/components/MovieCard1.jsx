@@ -1,4 +1,3 @@
-```javascript
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { CinemaContext } from "../context/CinemaContext";
@@ -24,7 +23,7 @@ function MovieCard1({ movie }) {
           className="overflow-hidden rounded-lg block"
         >
           <img
-            className="w-full aspect-[2/3] object-cover hover:scale-105 transition-transform duration-300"
+            className="w-full aspect-[2/3] object-cover lg:hover:scale-105 transition-transform duration-300"
             src={`https://image.tmdb.org/t/p/w342${movie.poster_path}`}
             alt={movie.title || movie.name}
           />

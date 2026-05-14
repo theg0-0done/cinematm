@@ -24,26 +24,26 @@ function Footer() {
         <div>
           <h3 className="text-[1.2rem] font-bold text-[var(--text-main)] mb-[20px]">Links</h3>
           <div className="flex flex-col gap-[12px]">
-            <Link onClick={handleScroll} to="/" className="text-[var(--text-muted)] text-[0.95rem] transition-colors duration-300 w-fit hover:text-[var(--accent-blue)]">Home</Link>
-            <Link onClick={handleScroll} to="/movies" className="text-[var(--text-muted)] text-[0.95rem] transition-colors duration-300 w-fit hover:text-[var(--accent-blue)]">Movies</Link>
-            <Link onClick={handleScroll} to="/tv-shows" className="text-[var(--text-muted)] text-[0.95rem] transition-colors duration-300 w-fit hover:text-[var(--accent-blue)]">TV Shows</Link>
-            <Link onClick={handleScroll} to="/watchlist" className="text-[var(--text-muted)] text-[0.95rem] transition-colors duration-300 w-fit hover:text-[var(--accent-blue)]">Watchlist</Link>
-            <Link onClick={handleScroll} to="/authenticate/log-in" className="text-[var(--text-muted)] text-[0.95rem] transition-colors duration-300 w-fit hover:text-[var(--accent-blue)]">Log In</Link>
-            <Link onClick={handleScroll} to="/authenticate/register" className="text-[var(--text-muted)] text-[0.95rem] transition-colors duration-300 w-fit hover:text-[var(--accent-blue)]">Register</Link>
+            <Link onClick={handleScroll} to="/" className="text-[var(--text-muted)] text-[0.95rem] transition-colors duration-300 w-fit lg:hover:text-[var(--accent-blue)]">Home</Link>
+            <Link onClick={handleScroll} to="/movies" className="text-[var(--text-muted)] text-[0.95rem] transition-colors duration-300 w-fit lg:hover:text-[var(--accent-blue)]">Movies</Link>
+            <Link onClick={handleScroll} to="/tv-shows" className="text-[var(--text-muted)] text-[0.95rem] transition-colors duration-300 w-fit lg:hover:text-[var(--accent-blue)]">TV Shows</Link>
+            <Link onClick={handleScroll} to="/watchlist" className="text-[var(--text-muted)] text-[0.95rem] transition-colors duration-300 w-fit lg:hover:text-[var(--accent-blue)]">Watchlist</Link>
+            <Link onClick={handleScroll} to="/authenticate/log-in" className="text-[var(--text-muted)] text-[0.95rem] transition-colors duration-300 w-fit lg:hover:text-[var(--accent-blue)]">Log In</Link>
+            <Link onClick={handleScroll} to="/authenticate/register" className="text-[var(--text-muted)] text-[0.95rem] transition-colors duration-300 w-fit lg:hover:text-[var(--accent-blue)]">Register</Link>
           </div>
         </div>
 
         <div>
           <h3 className="text-[1.2rem] font-bold text-[var(--text-main)] mb-[20px]">Get The App</h3>
           <div className="flex flex-row flex-wrap gap-[15px]">
-            <a href="#" className="flex items-center gap-[15px] bg-[var(--glass-bg)] border border-[var(--glass-border)] px-[20px] py-[12px] rounded-[12px] text-[var(--text-main)] transition-all duration-300 w-[200px] hover:bg-[rgba(255,255,255,0.1)] hover:border-[rgba(255,255,255,0.3)] hover:-translate-y-[2px]">
+            <a href="#" className="flex items-center gap-[15px] bg-[var(--glass-bg)] border border-[var(--glass-border)] px-[20px] py-[12px] rounded-[12px] text-[var(--text-main)] transition-all duration-300 w-[200px] lg:hover:bg-[rgba(255,255,255,0.1)] lg:hover:border-[rgba(255,255,255,0.3)] lg:hover:-translate-y-[2px]">
               <FaApple size={30} />
               <div>
                 <span className="block text-[0.75rem] text-[var(--text-muted)]">Download on the</span>
                 <strong className="block text-[1.1rem] font-semibold">App Store</strong>
               </div>
             </a>
-            <a href="#" className="flex items-center gap-[15px] bg-[var(--glass-bg)] border border-[var(--glass-border)] px-[20px] py-[12px] rounded-[12px] text-[var(--text-main)] transition-all duration-300 w-[200px] hover:bg-[rgba(255,255,255,0.1)] hover:border-[rgba(255,255,255,0.3)] hover:-translate-y-[2px]">
+            <a href="#" className="flex items-center gap-[15px] bg-[var(--glass-bg)] border border-[var(--glass-border)] px-[20px] py-[12px] rounded-[12px] text-[var(--text-main)] transition-all duration-300 w-[200px] lg:hover:bg-[rgba(255,255,255,0.1)] lg:hover:border-[rgba(255,255,255,0.3)] lg:hover:-translate-y-[2px]">
               <FaGooglePlay size={25} />
               <div>
                 <span className="block text-[0.75rem] text-[var(--text-muted)]">GET IT ON</span>

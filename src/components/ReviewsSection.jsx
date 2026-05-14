@@ -1,21 +1,28 @@
-import { useState, useRef } from "react";
+import { useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight, FaStar, FaQuoteLeft } from "react-icons/fa";
 
 function ReviewsSection({ reviews }) {
   const [page, setPage] = useState(0);
   const [sliding, setSliding] = useState(null); // 'left' | 'right' | null
-  const perPage = 3;
+  const [perPage, setPerPage] = useState(window.innerWidth < 768 ? 1 : 3);
+
+  useEffect(() => {
+    const handleResize = () => setPerPage(window.innerWidth < 768 ? 1 : 3);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   if (!reviews?.length) return null;
 
   const totalPages = Math.ceil(reviews.length / perPage);
-  const visible = reviews.slice(page * perPage, page * perPage + perPage);
+  const safePage = Math.min(page, Math.max(0, totalPages - 1));
+  const visible = reviews.slice(safePage * perPage, safePage * perPage + perPage);
 
   const navigate = (dir) => {
     const next = dir === "next"
-      ? Math.min(totalPages - 1, page + 1)
-      : Math.max(0, page - 1);
-    if (next === page) return;
+      ? Math.min(totalPages - 1, safePage + 1)
+      : Math.max(0, safePage - 1);
+    if (next === safePage) return;
 
     setSliding(dir === "next" ? "left" : "right");
     setTimeout(() => {
@@ -37,16 +44,16 @@ function ReviewsSection({ reviews }) {
         <div className="flex items-center gap-[10px]">
           <button
             onClick={() => navigate("prev")}
-            disabled={page === 0}
-            className="w-[36px] h-[36px] rounded-full border border-white/20 flex items-center justify-center text-white transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#00c3ff] hover:border-[#00c3ff] cursor-pointer bg-white/5"
+            disabled={safePage === 0}
+            className="w-[36px] h-[36px] rounded-full border border-white/20 flex items-center justify-center text-white transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed lg:hover:bg-[#00c3ff] lg:hover:border-[#00c3ff] cursor-pointer bg-white/5"
           >
             <FaChevronLeft size={12} />
           </button>
-          <span className="text-gray-400 text-[0.85rem] tabular-nums">{page + 1} / {totalPages}</span>
+          <span className="text-gray-400 text-[0.85rem] tabular-nums">{safePage + 1} / {totalPages}</span>
           <button
             onClick={() => navigate("next")}
-            disabled={page >= totalPages - 1}
-            className="w-[36px] h-[36px] rounded-full border border-white/20 flex items-center justify-center text-white transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#00c3ff] hover:border-[#00c3ff] cursor-pointer bg-white/5"
+            disabled={safePage >= totalPages - 1}
+            className="w-[36px] h-[36px] rounded-full border border-white/20 flex items-center justify-center text-white transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed lg:hover:bg-[#00c3ff] lg:hover:border-[#00c3ff] cursor-pointer bg-white/5"
           >
             <FaChevronRight size={12} />
           </button>
@@ -78,7 +85,7 @@ function ReviewsSection({ reviews }) {
           return (
             <div
               key={review.id}
-              className="bg-white/[0.04] border border-white/[0.08] rounded-[14px] p-[20px] flex flex-col gap-[14px] hover:border-white/20 transition-colors duration-200"
+              className="bg-white/[0.04] border border-white/[0.08] rounded-[14px] p-[20px] flex flex-col gap-[14px] lg:hover:border-white/20 transition-colors duration-200"
             >
               <div className="flex items-center gap-[10px]">
                 {avatarSrc ? (

@@ -22,7 +22,7 @@ const SectionHeader = ({ title, linkTo }) => (
       <Link
         onClick={() => window.scrollTo({ top: 0 })}
         to={linkTo}
-        className="flex items-center gap-1 text-[#00c3ff] text-xs font-semibold no-underline hover:underline"
+        className="flex items-center gap-1 text-[#00c3ff] text-xs font-semibold no-underline lg:hover:underline"
       >
         See All <IoIosArrowForward size={13} />
       </Link>
@@ -35,7 +35,7 @@ const CarouselSection = ({ title, linkTo, items, refEl, layout = "vertical", onS
     <SectionHeader title={title} linkTo={linkTo} />
     <div className="relative group">
       <button
-        className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 rounded-full bg-black/60 border border-white/10 text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-[#00c3ff]"
+        className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 rounded-full bg-black/60 border border-white/10 text-white opacity-0 lg:group-hover:opacity-100 transition-all lg:hover:bg-[#00c3ff]"
         onClick={onScrollLeft}
       >
         <IoIosArrowBack size={20} />
@@ -55,7 +55,7 @@ const CarouselSection = ({ title, linkTo, items, refEl, layout = "vertical", onS
       </div>
 
       <button
-        className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 rounded-full bg-black/60 border border-white/10 text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-[#00c3ff]"
+        className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 rounded-full bg-black/60 border border-white/10 text-white opacity-0 lg:group-hover:opacity-100 transition-all lg:hover:bg-[#00c3ff]"
         onClick={onScrollRight}
       >
         <IoIosArrowForward size={20} />
@@ -80,7 +80,7 @@ const BannerCard = ({ movie }) => {
       <img
         src={`https://image.tmdb.org/t/p/w780${backdrop}`}
         alt={title}
-        className="w-full h-full object-cover transition-transform duration-500 group-hover/banner:scale-105"
+        className="w-full h-full object-cover transition-transform duration-500 lg:group-hover/banner:scale-105"
         loading="lazy"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
@@ -104,7 +104,7 @@ const BannerCarouselSection = ({ title, items, refEl, onScrollLeft, onScrollRigh
     <SectionHeader title={title} />
     <div className="relative group">
       <button
-        className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 rounded-full bg-black/60 border border-white/10 text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-[#00c3ff]"
+        className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 rounded-full bg-black/60 border border-white/10 text-white opacity-0 lg:group-hover:opacity-100 transition-all lg:hover:bg-[#00c3ff]"
         onClick={onScrollLeft}
       >
         <IoIosArrowBack size={20} />
@@ -120,7 +120,7 @@ const BannerCarouselSection = ({ title, items, refEl, onScrollLeft, onScrollRigh
           ))}
       </div>
       <button
-        className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 rounded-full bg-black/60 border border-white/10 text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-[#00c3ff]"
+        className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 rounded-full bg-black/60 border border-white/10 text-white opacity-0 lg:group-hover:opacity-100 transition-all lg:hover:bg-[#00c3ff]"
         onClick={onScrollRight}
       >
         <IoIosArrowForward size={20} />
@@ -134,7 +134,7 @@ const ActorsCarousel = ({ actors, refEl, onScrollLeft, onScrollRight }) => (
     <SectionHeader title="Trending Actors" />
     <div className="relative group">
       <button
-        className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 rounded-full bg-black/60 border border-white/10 text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-[#00c3ff]"
+        className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 rounded-full bg-black/60 border border-white/10 text-white opacity-0 lg:group-hover:opacity-100 transition-all lg:hover:bg-[#00c3ff]"
         onClick={onScrollLeft}
       >
         <IoIosArrowBack size={20} />
@@ -149,12 +149,12 @@ const ActorsCarousel = ({ actors, refEl, onScrollLeft, onScrollRight }) => (
               <Link
                 to={`/actor/${actor.id}`}
                 key={actor.id}
-                className="relative shrink-0 w-[130px] md:w-[160px] aspect-[2/3] rounded-[14px] overflow-hidden group/cast cursor-pointer border border-white/5 transition-all duration-300 hover:border-[#00c3ff]/30 hover:shadow-[0_12px_30px_rgba(0,0,0,0.6)] snap-start no-underline"
+                className="relative shrink-0 w-[130px] md:w-[160px] aspect-[2/3] rounded-[14px] overflow-hidden group/cast cursor-pointer border border-white/5 transition-all duration-300 lg:hover:border-[#00c3ff]/30 lg:hover:shadow-[0_12px_30px_rgba(0,0,0,0.6)] snap-start no-underline"
               >
                 <img
                   src={`https://image.tmdb.org/t/p/w342${actor.profile_path}`}
                   alt={actor.name}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover/cast:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-700 lg:group-hover/cast:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0b0c10] via-black/10 to-transparent flex flex-col justify-end p-3">
                   <div className="font-bold text-[0.8rem] text-white leading-tight">{actor.name}</div>
@@ -167,7 +167,7 @@ const ActorsCarousel = ({ actors, refEl, onScrollLeft, onScrollRight }) => (
         )}
       </div>
       <button
-        className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 rounded-full bg-black/60 border border-white/10 text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-[#00c3ff]"
+        className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 rounded-full bg-black/60 border border-white/10 text-white opacity-0 lg:group-hover:opacity-100 transition-all lg:hover:bg-[#00c3ff]"
         onClick={onScrollRight}
       >
         <IoIosArrowForward size={20} />
@@ -258,7 +258,7 @@ function Home() {
               key={i}
               onClick={() => setActiveIndex(i)}
               className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                i === activeIndex ? "w-6 bg-[#00c3ff]" : "w-1.5 bg-white/40 hover:bg-white/70"
+                i === activeIndex ? "w-6 bg-[#00c3ff]" : "w-1.5 bg-white/40 lg:hover:bg-white/70"
               }`}
               aria-label={`Slide ${i + 1}`}
             />
@@ -274,10 +274,10 @@ function Home() {
             <div
               key={`thumb-${m.id}`}
               onClick={() => setActiveIndex(i)}
-              className={`min-w-[120px] h-[190px] rounded-[10px] overflow-hidden mb-4 relative cursor-pointer border-2 shrink-0 transition-all duration-300 hover:scale-105 ${
+              className={`min-w-[120px] h-[190px] rounded-[10px] overflow-hidden mb-4 relative cursor-pointer border-2 shrink-0 transition-all duration-300 lg:hover:scale-105 ${
                 i === activeIndex
                   ? "border-[#00c3ff] shadow-[0_8px_24px_rgba(0,195,255,0.45)] scale-110 -translate-y-2 z-[2]"
-                  : "border-transparent opacity-60 hover:opacity-90"
+                  : "border-transparent opacity-60 lg:hover:opacity-90"
               }`}
             >
               <img

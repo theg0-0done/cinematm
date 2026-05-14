@@ -77,10 +77,10 @@ export default function StreamEpisodesSection({ showId, showTitle, numberOfSeaso
          {/* Season Tabs */}
          <div className="flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none]">
              {Array.from({ length: numberOfSeasons || 1 }, (_, i) => i + 1).map(n => (
-                 <button key={n} onClick={() => { setSelectedSeason(n); setSelectedEpisode(1); }}
-                   className={`shrink-0 px-4 py-[6px] rounded-full text-[0.85rem] font-bold border transition-colors ${n === selectedSeason ? "bg-[#00c3ff] text-white border-[#00c3ff]" : "bg-transparent text-gray-400 border-white/20"}`}>
-                   Season {n}
-                 </button>
+                <button key={n} onClick={() => { setSelectedSeason(n); setSelectedEpisode(1); }}
+                  className={`shrink-0 px-4 py-[6px] rounded-full text-[0.85rem] font-bold border transition-colors ${n === selectedSeason ? "bg-[#00c3ff] text-white border-[#00c3ff]" : "bg-transparent text-gray-400 border-white/20"}`}>
+                  Season {n}
+                </button>
              ))}
          </div>
 
@@ -111,7 +111,11 @@ export default function StreamEpisodesSection({ showId, showTitle, numberOfSeaso
             ) : (
                <div className="w-full h-full bg-black/40 flex items-center justify-center text-white/50 text-[0.9rem]">Stream unavailable</div>
             )}
-            <select className="absolute top-2 right-2 max-w-[6rem] rounded-[6px] px-3 py-1 bg-black/30 border border-white/10 text-white">
+            <select 
+              value={selectedEpisode}
+              onChange={(e) => handleEpisodeChange(Number(e.target.value), e)}
+              className="absolute top-2 right-2 max-w-[6rem] rounded-[6px] px-3 py-1 bg-black/30 border border-white/10 text-white"
+            >
               {seasonData?.episodes?.map((ep) => (
                 <option key={ep.id} value={ep.episode_number}>
                   {ep.episode_number}. {ep.name}
@@ -214,7 +218,7 @@ export default function StreamEpisodesSection({ showId, showTitle, numberOfSeaso
                   className={`shrink-0 h-[32px] min-w-[56px] px-4 rounded-full text-sm font-semibold transition-all duration-300 ${
                     isActive 
                       ? "bg-[#00c3ff] text-white shadow-[0_0_12px_rgba(0,195,255,0.5)] border-transparent" 
-                      : "bg-white/[0.06] border border-white/10 text-gray-400 hover:bg-white/10"
+                      : "bg-white/[0.06] border border-white/10 text-gray-400 lg:hover:bg-white/10"
                   }`}
                 >
                   Ep {ep.episode_number}

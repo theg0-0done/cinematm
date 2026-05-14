@@ -55,7 +55,7 @@ function GenreCard({ genre }) {
     <div
       ref={cardRef}
       onClick={handleClick}
-      className="relative flex-shrink-0 w-[280px] h-[320px] rounded-2xl overflow-hidden cursor-pointer border border-white/[0.08] bg-[#0f1117]/80 transition-all duration-300 hover:scale-[1.03] hover:border-white/25 hover:shadow-[0_0_24px_rgba(255,255,255,0.08)] group/card"
+      className="relative flex-shrink-0 w-[280px] h-[320px] rounded-2xl overflow-hidden cursor-pointer border border-white/[0.08] bg-[#0f1117]/80 transition-all duration-300 lg:hover:scale-[1.03] lg:hover:border-white/25 lg:hover:shadow-[0_0_24px_rgba(255,255,255,0.08)] group/card"
     >
       {/* 2×2 Poster grid */}
       <div className="absolute inset-0 grid grid-cols-2 gap-px">
@@ -67,7 +67,7 @@ function GenreCard({ genre }) {
               <img
                 src={`https://image.tmdb.org/t/p/w300${posters[i]}`}
                 alt=""
-                className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
+                className="w-full h-full object-cover transition-transform duration-500 lg:group-hover/card:scale-105"
                 loading="lazy"
               />
             ) : (
@@ -85,7 +85,7 @@ function GenreCard({ genre }) {
       {/* Text + arrow */}
       <div className="absolute bottom-0 inset-x-0 p-4 flex items-end justify-between">
         <span className="text-white font-bold text-[1.05rem] leading-tight drop-shadow">{genre.name}</span>
-        <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white backdrop-blur-sm group-hover/card:bg-[#00c3ff] group-hover/card:border-[#00c3ff] transition-colors">
+        <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white backdrop-blur-sm lg:group-hover/card:bg-[#00c3ff] lg:group-hover/card:border-[#00c3ff] transition-colors">
           <FiChevronRight size={16} />
         </div>
       </div>
@@ -120,10 +120,10 @@ function GenreShowcaseSection() {
           </p>
         </div>
         <div className="flex gap-2 shrink-0 mt-1">
-          <button onClick={() => scroll("left")} className="w-10 h-10 rounded-full border border-white/15 bg-white/5 flex items-center justify-center text-white hover:bg-[#00c3ff] hover:border-[#00c3ff] transition-all cursor-pointer">
+          <button onClick={() => scroll("left")} className="w-10 h-10 rounded-full border border-white/15 bg-white/5 flex items-center justify-center text-white lg:hover:bg-[#00c3ff] lg:hover:border-[#00c3ff] transition-all cursor-pointer">
             <IoIosArrowBack size={18} />
           </button>
-          <button onClick={() => scroll("right")} className="w-10 h-10 rounded-full border border-white/15 bg-white/5 flex items-center justify-center text-white hover:bg-[#00c3ff] hover:border-[#00c3ff] transition-all cursor-pointer">
+          <button onClick={() => scroll("right")} className="w-10 h-10 rounded-full border border-white/15 bg-white/5 flex items-center justify-center text-white lg:hover:bg-[#00c3ff] lg:hover:border-[#00c3ff] transition-all cursor-pointer">
             <IoIosArrowForward size={18} />
           </button>
         </div>

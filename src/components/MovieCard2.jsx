@@ -20,12 +20,12 @@ function MovieCard2({ movie }) {
             <img
               src={`https://image.tmdb.org/t/p/w780${movie.v_backdrop}`}
               alt={movie.title || movie.name}
-              className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500"
+              className="w-full aspect-video object-cover lg:group-hover:scale-105 transition-transform duration-500"
             />
           </Link>
         </div>
         <div className="px-1">
-          <h4 className="font-bold text-lg truncate text-white/90 group-hover:text-white transition-colors">{movie.title || movie.name}</h4>
+          <h4 className="font-bold text-lg truncate text-white/90 lg:group-hover:text-white transition-colors">{movie.title || movie.name}</h4>
         </div>
       </div>
     )

@@ -29,7 +29,7 @@ const dropdownCls =
 function ProviderLogo({ provider }) {
   return (
     <div className="flex flex-col items-center gap-2 shrink-0 group/prov">
-      <div className="w-[52px] h-[52px] rounded-[14px] overflow-hidden border border-white/10 shadow-md transition-all duration-300 group-hover/prov:border-[#00c3ff]/50 group-hover/prov:shadow-[0_0_16px_rgba(0,195,255,0.25)]">
+      <div className="w-[52px] h-[52px] rounded-[14px] overflow-hidden border border-white/10 shadow-md transition-all duration-300 lg:group-hover/prov:border-[#00c3ff]/50 lg:group-hover/prov:shadow-[0_0_16px_rgba(0,195,255,0.25)]">
         <img
           src={`${IMG_BASE}${provider.logo_path}`}
           alt={provider.provider_name}
@@ -123,7 +123,7 @@ function WatchProviders({ id, type }) {
                     className={`px-4 py-[6px] rounded-full text-[0.8rem] font-semibold border transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed ${
                       activeTab === key
                         ? "bg-[#00c3ff] border-[#00c3ff] text-white shadow-[0_0_12px_rgba(0,195,255,0.4)]"
-                        : "bg-transparent border-white/15 text-gray-400 hover:border-white/30"
+                        : "bg-transparent border-white/15 text-gray-400 lg:hover:border-white/30"
                     }`}
                   >
                     {label}
@@ -152,7 +152,7 @@ function WatchProviders({ id, type }) {
                 href={regionData.link}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-4 inline-block text-[0.7rem] text-gray-600 hover:text-[#00c3ff] transition-colors no-underline"
+                className="mt-4 inline-block text-[0.7rem] text-gray-600 lg:hover:text-[#00c3ff] transition-colors no-underline"
               >
                 Powered by JustWatch →
               </a>

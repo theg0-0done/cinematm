@@ -55,7 +55,7 @@ function MovieReview({ movie, onPrev, onNext }) {
       {onPrev && (
         <button
           onClick={onPrev}
-          className="absolute lg:hidden left-3 md:left-6 top-1/2 -translate-y-1/2 z-20 text-white/70 hover:text-white transition-colors p-2"
+          className="absolute lg:hidden left-3 md:left-6 top-1/2 -translate-y-1/2 z-20 text-white/70 lg:hover:text-white transition-colors p-2"
           aria-label="Previous"
         >
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -66,7 +66,7 @@ function MovieReview({ movie, onPrev, onNext }) {
       {onNext && (
         <button
           onClick={onNext}
-          className="absolute lg:hidden right-3 md:right-6 top-1/2 -translate-y-1/2 z-20 text-white/70 hover:text-white transition-colors p-2"
+          className="absolute lg:hidden right-3 md:right-6 top-1/2 -translate-y-1/2 z-20 text-white/70 lg:hover:text-white transition-colors p-2"
           aria-label="Next"
         >
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -85,46 +85,35 @@ function MovieReview({ movie, onPrev, onNext }) {
         {/* Rating + Year row */}
         <div className="flex items-center gap-3 mb-3 text-sm text-white">
           {rating && (
-            <span className="flex items-center gap-1 font-semibold px-2 py-0.5 bg-white/10 border border-white/20 rounded-lg">
+            <span className="flex items-center gap-1 font-semibold">
               <FaStar className="text-[#ffd700]" size={13} />
               {rating}
             </span>
           )}
           •
           {year && (
-            <span className="px-2 py-0.5 bg-white/10 border border-white/20 rounded-lg text-sm font-medium">
+            <span className=" text-sm font-medium">
               {year}
             </span>
           )}
           •
           {movie.media_type === "tv" && (
-            <span className="px-2 py-0.5 bg-white/10 border border-white/20 rounded-lg text-sm font-medium">
+            <span className=" text-sm font-medium">
               TV
             </span>
           )}
           {movie.media_type === "movie" && (
-            <span className="px-2 py-0.5 bg-white/10 border border-white/20 rounded-lg text-sm font-medium">
+            <span className=" text-sm font-medium">
               Movie
             </span>
           )}
           •
           {genreNames.length > 0 && (
-            <span key={genreNames[0]} className="px-2 py-0.5 bg-white/10 border border-white/20 rounded-lg text-sm font-medium">
+            <span key={genreNames[0]} className=" text-sm font-medium">
               {genreNames[0]}
             </span>
           )}
         </div>
-
-        {/* Genres ships */}
-        {genreNames.length > 0 && (
-          <div className="hidden lg:flex gap-2 mb-3">
-            {genreNames.map((genre) => (
-              <span key={genre} className="px-2 py-0.5 bg-white/10 border border-white/20 rounded-full text-xs font-medium">
-                {genre}
-              </span>
-            ))}
-          </div>
-        )}
 
         {/* Overview */}
         {movie.overview && (
@@ -135,16 +124,16 @@ function MovieReview({ movie, onPrev, onNext }) {
         <div className="flex gap-3 flex-wrap">
           <Link
             to={`/${mediaType}/${movie.id}`}
-            className="flex items-center gap-2 bg-[#00c3ff] text-[#080810] px-5 py-2.5 rounded-full font-bold text-[0.9rem] no-underline transition-all hover:bg-[#00d8ff] hover:scale-105 active:scale-95"
+            className="flex items-center gap-2 bg-[#00c3ff] text-[#080810] px-5 py-2.5 rounded-full font-bold text-[0.9rem] no-underline transition-all lg:hover:bg-[#00d8ff] lg:hover:scale-105 active:scale-95"
           >
             <FaPlay size={12} /> Watch Now
           </Link>
           <button
             onClick={toggleWatchlist}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold text-[0.9rem] border transition-all hover:scale-105 active:scale-95 ${
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold text-[0.9rem] border transition-all lg:hover:scale-105 active:scale-95 ${
               inWatchlist
                 ? "bg-white/20 border-white/30 text-white"
-                : "bg-white/10 border-white/20 text-white hover:bg-white/15"
+                : "bg-white/10 border-white/20 text-white lg:hover:bg-white/15"
             }`}
           >
             {inWatchlist ? (

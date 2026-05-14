@@ -184,8 +184,8 @@ function MoviePage() {
               <h3 className="text-[1rem] font-bold mb-4 uppercase tracking-[0.15em] text-gray-400">Cast</h3>
               <div className="flex gap-2 overflow-x-auto pb-4 [scrollbar-width:none]">
                 {movieData.credits.cast.slice(0,10).map(actor => actor.profile_path && (
-                  <Link key={actor.id} to={`/actor/${actor.id}`} className="flex flex-col items-center gap-2 shrink-0 w-[72px] no-underline">
-                    <img src={`https://image.tmdb.org/t/p/w185${actor.profile_path}`} className="w-full h-[100px] rounded-xl object-cover border border-white/20 shadow-lg"/>
+                  <Link key={actor.id} to={`/actor/${actor.id}`} className="flex flex-col items-center gap-2 shrink-0 w-[92px] no-underline">
+                    <img src={`https://image.tmdb.org/t/p/w185${actor.profile_path}`} className="w-full h-auto rounded-xl object-cover border border-white/20 shadow-lg"/>
                     <span className="text-[0.7rem] font-bold text-center leading-tight text-white line-clamp-1">{actor.name}</span>
                     <span className="text-[0.6rem] text-gray-500 text-center leading-tight line-clamp-1 w-full">{actor.character}</span>
                   </Link>
@@ -193,6 +193,8 @@ function MoviePage() {
               </div>
             </div>
           )}
+
+          <ReviewsSection reviews={movieData.reviews?.results}/>
 
           {movieData.images?.backdrops?.length > 0 && (
             <div className="mt-2">

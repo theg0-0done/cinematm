@@ -91,17 +91,11 @@ const ActorPage = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-[#050505] to-transparent" />
         </div>
 
-        <div className="relative z-10 max-w-[1200px] mx-auto w-full px-[5%] flex flex-col md:flex-row items-center md:items-end gap-12">
+        <div className="relative z-10 max-w-[1200px] mx-auto w-full px-[5%] flex flex-col lg:flex-row items-center lg:items-end gap-12">
           {/* Main Info */}
-          <div className="flex-1 text-center md:text-left">
-            <div className="flex flex-wrap justify-center md:justify-start gap-4 text-gray-400 text-[0.8rem] font-bold uppercase tracking-[0.2em] mb-4">
-              <span>Actor</span>
-              {actor.known_for_department !== "Acting" && (
-                <>
-                  <span className="text-[#00c3ff]">|</span>
-                  <span>{actor.known_for_department}</span>
-                </>
-              )}
+          <div className="flex-1 text-center lg:text-left">
+            <div className="flex flex-wrap justify-center lg:justify-start gap-4 text-gray-400 text-[0.8rem] font-bold uppercase tracking-[0.2em] mb-4">
+              <span>{actor.known_for_department}</span>
             </div>
 
             <h1 className="text-[3.5rem] md:text-[5rem] lg:text-[6rem] font-black leading-[0.9] mb-8 drop-shadow-2xl">
@@ -109,7 +103,7 @@ const ActorPage = () => {
             </h1>
 
             {/* Stats */}
-            <div className="flex flex-wrap justify-center md:justify-start gap-12">
+            <div className="hidden lg:flex flex-wrap justify-center md:justify-start gap-12">
               <div className="flex flex-col gap-1">
                 <span className="text-[2.5rem] font-black text-white leading-none">{careerYears}</span>
                 <span className="text-[0.6rem] font-bold text-gray-500 uppercase tracking-widest">Years of Career</span>
@@ -127,12 +121,27 @@ const ActorPage = () => {
 
           {/* Floating Portrait */}
           <div className="w-[280px] md:w-[350px] shrink-0 relative group">
-            <div className="absolute inset-0 bg-[#00c3ff] rounded-2xl rotate-3 scale-95 opacity-20 blur-2xl group-hover:rotate-6 transition-transform duration-500" />
+            <div className="absolute inset-0 bg-[#00c3ff] rounded-2xl rotate-3 scale-95 opacity-20 blur-2xl lg:group-hover:rotate-6 transition-transform duration-500" />
             <img
               src={`https://image.tmdb.org/t/p/h632${actor.profile_path}`}
               alt={actor.name}
-              className="relative z-10 w-full rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.8)] border border-white/10 grayscale hover:grayscale-0 transition-all duration-700 object-cover aspect-[3/4]"
+              className="relative z-10 w-full rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.8)] border border-white/10 transition-all duration-700 object-cover aspect-[3/4]"
             />
+          </div>
+
+          <div className="lg:hidden flex justify-center md:justify-start gap-6">
+            <div className="flex flex-col items-center gap-2">
+              <span className="text-[2rem] font-black text-white leading-none">{careerYears}</span>
+              <span className="text-[0.5rem] font-bold text-gray-500 uppercase tracking-widest">Years of Career</span>
+            </div>
+            <div className="flex flex-col items-center gap-2">
+              <span className="text-[2rem] font-black text-white leading-none">{actor.combined_credits?.length || 0}</span>
+              <span className="text-[0.5rem] font-bold text-gray-500 uppercase tracking-widest">Movies & Shows</span>
+            </div>
+            <div className="flex flex-col items-center gap-2">
+              <span className="text-[2rem] font-black text-white leading-none">{actor.popularity?.toFixed(0)}</span>
+              <span className="text-[0.5rem] font-bold text-gray-500 uppercase tracking-widest">Popularity Score</span>
+            </div>
           </div>
         </div>
       </section>
@@ -179,7 +188,7 @@ const ActorPage = () => {
                     href={`https://www.instagram.com/${instagramId}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center gap-2 px-3 py-[6px] rounded-full text-[0.8rem] font-semibold border border-white/15 text-pink-400 bg-pink-500/10 hover:bg-pink-500/20 hover:border-pink-400/40 transition-all no-underline"
+                    className="flex items-center gap-2 px-3 py-[6px] rounded-full text-[0.8rem] font-semibold border border-white/15 text-pink-400 bg-pink-500/10 lg:hover:bg-pink-500/20 lg:hover:border-pink-400/40 transition-all no-underline"
                   >
                     <FaInstagram size={14} /> Instagram
                   </a>
@@ -189,7 +198,7 @@ const ActorPage = () => {
                     href={`https://twitter.com/${twitterId}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center gap-2 px-3 py-[6px] rounded-full text-[0.8rem] font-semibold border border-white/15 text-sky-400 bg-sky-500/10 hover:bg-sky-500/20 hover:border-sky-400/40 transition-all no-underline"
+                    className="flex items-center gap-2 px-3 py-[6px] rounded-full text-[0.8rem] font-semibold border border-white/15 text-sky-400 bg-sky-500/10 lg:hover:bg-sky-500/20 lg:hover:border-sky-400/40 transition-all no-underline"
                   >
                     <FaTwitter size={14} /> Twitter / X
                   </a>
@@ -208,7 +217,7 @@ const ActorPage = () => {
                     <div key={i} className="rounded-lg overflow-hidden border border-white/5 bg-white/5">
                       <img
                         src={`https://image.tmdb.org/t/p/w185${img.file_path}`}
-                        className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110"
+                        className="w-full h-full object-cover grayscale lg:hover:grayscale-0 transition-all duration-300 lg:hover:scale-110"
                         alt="actor still"
                       />
                     </div>
@@ -233,7 +242,7 @@ const ActorPage = () => {
       </section>
 
       {/* Filmography Section */}
-      <section className="bg-white/[0.02] border-t border-white/5 py-24">
+      <section className="bg-white/[0.02] border-t border-white/5 py-24 relative">
         <div className="max-w-[1200px] mx-auto px-[5%]">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-12 gap-4">
             <div>
@@ -251,10 +260,10 @@ const ActorPage = () => {
                 <button
                   key={key}
                   onClick={() => setFilmTab(key)}
-                  className={`px-4 py-[7px] rounded-full text-[0.8rem] font-semibold border transition-all cursor-pointer ${
+                  className={`px-4 py-[7px] rounded-full whitespace-nowrap text-[0.8rem] font-semibold border transition-all cursor-pointer ${
                     filmTab === key
                       ? "bg-[#00c3ff] border-[#00c3ff] text-white shadow-[0_0_14px_rgba(0,195,255,0.35)]"
-                      : "bg-transparent border-white/15 text-gray-400 hover:border-white/30 hover:text-white"
+                      : "bg-transparent border-white/15 text-gray-400 lg:hover:border-white/30 lg:hover:text-white"
                   }`}
                 >
                   {label}
@@ -263,14 +272,14 @@ const ActorPage = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 md:gap-x-6 md:gap-y-10">
+          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 md:gap-[20px] w-full">
             {activeCredits.map((item) => (
-              <div key={`${item.id}-${item.media_type}`} className="flex flex-col gap-3">
-                <MovieCard movie={item} layout="vertical" />
-              </div>
+              <MovieCard key={`${item.id}-${item.media_type}`} movie={item} layout="grid" />
             ))}
           </div>
         </div>
+        {/* Bottom Fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[#050505] via-[#050505]/50 to-transparent z-10 pointer-events-none" />
       </section>
     </div>
   );

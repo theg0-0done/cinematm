@@ -14,7 +14,7 @@ function MovieCard3({ movie }) {
         <div className="relative overflow-hidden rounded-lg aspect-[2/3] border border-white/10">
           {mediaType === "watchlist" ? (
             <div
-              className="absolute right-2 top-2 bg-red-500/80 backdrop-blur-sm p-1.5 rounded-full cursor-pointer z-10 transition-colors hover:bg-red-600"
+              className="absolute right-2 top-2 bg-red-500/80 backdrop-blur-sm p-1.5 rounded-full cursor-pointer z-10 transition-colors lg:hover:bg-red-600"
               title="Remove from watchlist"
               onClick={() =>
                 setWatchlist((prev) =>
@@ -38,14 +38,14 @@ function MovieCard3({ movie }) {
             className="block h-full"
           >
             <img
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              className="w-full h-full object-cover lg:group-hover:scale-110 transition-transform duration-500"
               src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
               alt={movie.title || movie.name}
             />
           </Link>
         </div>
 
-        <p className="font-semibold text-sm truncate group-hover:text-[#00c3ff] transition-colors">{movie.title || movie.name}</p>
+        <p className="font-semibold text-sm truncate lg:group-hover:text-[#00c3ff] transition-colors">{movie.title || movie.name}</p>
       </div>
     )
   );
