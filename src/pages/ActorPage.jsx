@@ -5,6 +5,10 @@ import MovieCard from "../components/MovieCard";
 import ImdbBadge from "../components/ImdbBadge";
 import Loading from "../components/Loading";
 
+const SectionTitle = ({ children }) => (
+  <h2 className="text-[1.2rem] lg:text-[1.8rem] font-bold mb-[20px] text-white border-l-4 border-[#00c3ff] pl-[15px]">{children}</h2>
+);
+
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
 
@@ -130,10 +134,12 @@ const ActorPage = () => {
           </div>
 
           <div className="lg:hidden flex justify-center md:justify-start gap-6">
-            <div className="flex flex-col items-center gap-2">
-              <span className="text-[2rem] font-black text-white leading-none">{careerYears}</span>
-              <span className="text-[0.5rem] font-bold text-gray-500 uppercase tracking-widest">Years of Career</span>
-            </div>
+            {careerYears > 0 && (
+              <div className="flex flex-col items-center gap-2">
+                <span className="text-[2rem] font-black text-white leading-none">{careerYears}</span>
+                <span className="text-[0.5rem] font-bold text-gray-500 uppercase tracking-widest">Years of Career</span>
+              </div>
+            )}
             <div className="flex flex-col items-center gap-2">
               <span className="text-[2rem] font-black text-white leading-none">{actor.combined_credits?.length || 0}</span>
               <span className="text-[0.5rem] font-bold text-gray-500 uppercase tracking-widest">Movies & Shows</span>
@@ -149,69 +155,77 @@ const ActorPage = () => {
       {/* Content Body */}
       <section className="max-w-[1200px] mx-auto px-[5%] py-20">
         {/* Quote Block */}
-        <div className="mb-24 max-w-2xl">
-          <span className="text-[5rem] text-[#00c3ff] font-serif leading-none opacity-40 select-none block h-10">"</span>
-          <p className="text-[1.8rem] md:text-[2.2rem] font-bold text-white/90 leading-tight">
-            {actor.biography?.split(".")[0]}.
-          </p>
-        </div>
+        {actor.biography && (
+          <div className="mb-24 max-w-2xl">
+            <span className="text-[5rem] text-[#00c3ff] font-serif leading-none opacity-40 select-none block h-10">"</span>
+            <p className="text-[1.8rem] md:text-[2.2rem] font-bold text-white/90 leading-tight">
+              {actor.biography.split(".")[0]}.
+            </p>
+          </div>
+        )}
 
         <div className="flex flex-col lg:flex-row gap-20">
           {/* Left: Info Side */}
           <div className="w-full lg:w-[300px] shrink-0 flex flex-col gap-10">
-            <div className="flex flex-col gap-1">
-              <h4 className="text-[0.7rem] font-black text-[#00c3ff] uppercase tracking-[0.3em] mb-3">Birthday</h4>
-              <p className="text-gray-300 flex items-center gap-2">
-                <FaBirthdayCake className="text-white/20" /> {actor.birthday || "Unknown"}
-              </p>
-            </div>
-            <div className="flex flex-col gap-1">
-              <h4 className="text-[0.7rem] font-black text-[#00c3ff] uppercase tracking-[0.3em] mb-3">Birthplace</h4>
-              <p className="text-gray-300 flex items-center gap-2">
-                <FaMapMarkerAlt className="text-white/20" /> {actor.place_of_birth || "Unknown"}
-              </p>
-            </div>
-            <div className="flex flex-col gap-1">
-              <h4 className="text-[0.7rem] font-black text-[#00c3ff] uppercase tracking-[0.3em] mb-3">Occupation</h4>
-              <p className="text-gray-300 flex items-center gap-2 line-clamp-1">
-                <FaBriefcase className="text-white/20" /> {actor.known_for_department}
-              </p>
-            </div>
+            {actor.birthday && (
+              <div className="flex flex-col gap-1">
+                <h4 className="text-[0.7rem] font-black text-[#00c3ff] uppercase tracking-[0.3em] mb-3">Birthday</h4>
+                <p className="text-gray-300 flex items-center gap-2">
+                  <FaBirthdayCake className="text-white/20" /> {actor.birthday}
+                </p>
+              </div>
+            )}
+            {actor.place_of_birth && (
+              <div className="flex flex-col gap-1">
+                <h4 className="text-[0.7rem] font-black text-[#00c3ff] uppercase tracking-[0.3em] mb-3">Birthplace</h4>
+                <p className="text-gray-300 flex items-center gap-2">
+                  <FaMapMarkerAlt className="text-white/20" /> {actor.place_of_birth}
+                </p>
+              </div>
+            )}
+            {actor.known_for_department && (
+              <div className="flex flex-col gap-1">
+                <h4 className="text-[0.7rem] font-black text-[#00c3ff] uppercase tracking-[0.3em] mb-3">Occupation</h4>
+                <p className="text-gray-300 flex items-center gap-2 line-clamp-1">
+                  <FaBriefcase className="text-white/20" /> {actor.known_for_department}
+                </p>
+              </div>
+            )}
 
             {/* External Links */}
-            <div className="flex flex-col gap-3">
-              <h4 className="text-[0.7rem] font-black text-[#00c3ff] uppercase tracking-[0.3em]">Links</h4>
-              <div className="flex flex-wrap gap-2">
-                <ImdbBadge imdbId={imdbId} variant="name" />
-                {instagramId && (
-                  <a
-                    href={`https://www.instagram.com/${instagramId}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-2 px-3 py-[6px] rounded-full text-[0.8rem] font-semibold border border-white/15 text-pink-400 bg-pink-500/10 lg:hover:bg-pink-500/20 lg:hover:border-pink-400/40 transition-all no-underline"
-                  >
-                    <FaInstagram size={14} /> Instagram
-                  </a>
-                )}
-                {twitterId && (
-                  <a
-                    href={`https://twitter.com/${twitterId}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-2 px-3 py-[6px] rounded-full text-[0.8rem] font-semibold border border-white/15 text-sky-400 bg-sky-500/10 lg:hover:bg-sky-500/20 lg:hover:border-sky-400/40 transition-all no-underline"
-                  >
-                    <FaTwitter size={14} /> Twitter / X
-                  </a>
-                )}
+            {(imdbId || instagramId || twitterId) && (
+              <div className="flex flex-col gap-3">
+                <h4 className="text-[0.7rem] font-black text-[#00c3ff] uppercase tracking-[0.3em]">Links</h4>
+                <div className="flex flex-wrap gap-2">
+                  <ImdbBadge imdbId={imdbId} variant="name" />
+                  {instagramId && (
+                    <a
+                      href={`https://www.instagram.com/${instagramId}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-2 px-3 py-[6px] rounded-full text-[0.8rem] font-semibold border border-white/15 text-pink-400 bg-pink-500/10 lg:hover:bg-pink-500/20 lg:hover:border-pink-400/40 transition-all no-underline"
+                    >
+                      <FaInstagram size={14} /> Instagram
+                    </a>
+                  )}
+                  {twitterId && (
+                    <a
+                      href={`https://twitter.com/${twitterId}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-2 px-3 py-[6px] rounded-full text-[0.8rem] font-semibold border border-white/15 text-sky-400 bg-sky-500/10 lg:hover:bg-sky-500/20 lg:hover:border-sky-400/40 transition-all no-underline"
+                    >
+                      <FaTwitter size={14} /> Twitter / X
+                    </a>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Photo Mini-Gallery */}
             {actor.images?.profiles?.length > 1 && (
               <div className="mt-6">
-                <div className="flex justify-between items-center mb-6">
-                  <h4 className="text-[0.7rem] font-black text-[#00c3ff] uppercase tracking-[0.3em]">Photo Gallery</h4>
-                </div>
+                <SectionTitle>Photo Gallery</SectionTitle>
                 <div className="grid grid-cols-2 gap-3">
                   {actor.images?.profiles?.slice(1, 5).map((img, i) => (
                     <div key={i} className="rounded-lg overflow-hidden border border-white/5 bg-white/5">
@@ -228,16 +242,14 @@ const ActorPage = () => {
           </div>
 
           {/* Right: Biography */}
-          <div className="flex-1">
-            <h4 className="text-[0.7rem] font-black text-[#00c3ff] uppercase tracking-[0.3em] mb-8">Biography</h4>
-            <div className="text-gray-400 leading-relaxed text-[1rem] space-y-6 columns-1 md:columns-2 gap-12 font-medium">
-              {actor.biography ? (
-                actor.biography.split("\n\n").map((para, i) => <p key={i}>{para}</p>)
-              ) : (
-                <p>No biography available for this artist.</p>
-              )}
+          {actor.biography && (
+            <div className="flex-1">
+              <SectionTitle>Biography</SectionTitle>
+              <div className="text-gray-400 leading-relaxed text-[1rem] space-y-6 columns-1 md:columns-2 gap-12 font-medium">
+                {actor.biography.split("\n\n").map((para, i) => <p key={i}>{para}</p>)}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
 
@@ -246,8 +258,7 @@ const ActorPage = () => {
         <div className="max-w-[1200px] mx-auto px-[5%]">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-12 gap-4">
             <div>
-              <h4 className="text-[0.7rem] font-black text-[#00c3ff] uppercase tracking-[0.3em] mb-3">Filmography</h4>
-              <h2 className="text-[2.5rem] font-black leading-none">Best Known Works</h2>
+              <SectionTitle>Best Known Works</SectionTitle>
             </div>
 
             {/* Tab Toggle */}

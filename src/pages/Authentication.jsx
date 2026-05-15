@@ -23,7 +23,7 @@ function Authentication() {
       </div>
 
       <div className="relative z-10 w-full max-w-[450px] p-8 md:p-16 rounded-[4px] bg-black/40 backdrop-blur-[5px] rounded-xl flex flex-col gap-8 shadow-2xl">
-        <h1 className="text-3xl font-bold text-white text-left">
+        <h1 className="text-3xl font-bold text-white text-left border-l-4 border-[#00c3ff] pl-[15px]">
           {isRegister ? "Sign Up" : "Sign In"}
         </h1>
 

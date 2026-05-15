@@ -16,8 +16,10 @@ import { FaStar } from "react-icons/fa";
 ───────────────────────────────────────────── */
 
 const SectionHeader = ({ title, linkTo }) => (
-  <div className="flex justify-between items-center mb-4">
-    <h3 className="text-white text-base font-bold uppercase tracking-widest">{title}</h3>
+  <div className="flex justify-between items-center mb-[20px]">
+    <h3 className="text-white text-[1.2rem] lg:text-[1.8rem] font-bold border-l-4 border-[#00c3ff] pl-[15px] leading-tight">
+      {title}
+    </h3>
     {linkTo && (
       <Link
         onClick={() => window.scrollTo({ top: 0 })}
@@ -158,9 +160,11 @@ const ActorsCarousel = ({ actors, refEl, onScrollLeft, onScrollRight }) => (
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0b0c10] via-black/10 to-transparent flex flex-col justify-end p-3">
                   <div className="font-bold text-[0.8rem] text-white leading-tight">{actor.name}</div>
-                  <div className="text-gray-400 text-[0.65rem] font-medium mt-0.5 truncate">
-                    {actor.known_for?.[0]?.title || actor.known_for?.[0]?.name || "Actor"}
-                  </div>
+                  {(actor.known_for?.[0]?.title || actor.known_for?.[0]?.name) && (
+                    <div className="text-gray-400 text-[0.65rem] font-medium mt-0.5 truncate">
+                      {actor.known_for?.[0]?.title || actor.known_for?.[0]?.name}
+                    </div>
+                  )}
                 </div>
               </Link>
             )

@@ -22,7 +22,7 @@ function Footer() {
         </div>
         
         <div>
-          <h3 className="text-[1.2rem] font-bold text-[var(--text-main)] mb-[20px]">Links</h3>
+          <h3 className="text-[1.2rem] font-bold text-[var(--text-main)] mb-[20px] border-l-4 border-[#00c3ff] pl-[15px]">Links</h3>
           <div className="flex flex-col gap-[12px]">
             <Link onClick={handleScroll} to="/" className="text-[var(--text-muted)] text-[0.95rem] transition-colors duration-300 w-fit lg:hover:text-[var(--accent-blue)]">Home</Link>
             <Link onClick={handleScroll} to="/movies" className="text-[var(--text-muted)] text-[0.95rem] transition-colors duration-300 w-fit lg:hover:text-[var(--accent-blue)]">Movies</Link>
@@ -34,7 +34,7 @@ function Footer() {
         </div>
 
         <div>
-          <h3 className="text-[1.2rem] font-bold text-[var(--text-main)] mb-[20px]">Get The App</h3>
+          <h3 className="text-[1.2rem] font-bold text-[var(--text-main)] mb-[20px] border-l-4 border-[#00c3ff] pl-[15px]">Get The App</h3>
           <div className="flex flex-row flex-wrap gap-[15px]">
             <a href="#" className="flex items-center gap-[15px] bg-[var(--glass-bg)] border border-[var(--glass-border)] px-[20px] py-[12px] rounded-[12px] text-[var(--text-main)] transition-all duration-300 w-[200px] lg:hover:bg-[rgba(255,255,255,0.1)] lg:hover:border-[rgba(255,255,255,0.3)] lg:hover:-translate-y-[2px]">
               <FaApple size={30} />

@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { CinemaContext } from "../context/CinemaContext";
-import { FaPlus, FaCheck, FaTimes, FaPlay } from "react-icons/fa";
+import { FaPlus, FaCheck, FaTimes, FaPlay, FaStar } from "react-icons/fa";
 
 function MovieCard({ movie, layout = "vertical", showRemove = false }) {
   const { setWatchlist, watchlist } = useContext(CinemaContext);
@@ -122,8 +122,14 @@ function MovieCard({ movie, layout = "vertical", showRemove = false }) {
             {year}
           </span>
         </Link>
-        
-        
+        {movie.vote_average > 0 && (
+          <div className="flex items-center gap-1 shrink-0 bg-white/5 border border-white/10 px-1.5 py-0.5 rounded-[6px]">
+            <FaStar size={10} className="text-[#ffd700]" />
+            <span className="text-[0.7rem] font-bold text-gray-300">
+              {movie.vote_average.toFixed(1)}
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );

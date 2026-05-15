@@ -132,7 +132,7 @@ export default function StreamEpisodesSection({ showId, showTitle, numberOfSeaso
               {episodeData?.air_date && <span>• {formatDate(episodeData?.air_date)}</span>}  
               {episodeData?.runtime > 0 && <span>• {episodeData?.runtime} min</span>}
             </div>
-            <p className="text-[0.9rem] text-gray-300 leading-relaxed line-clamp-4">{episodeData?.overview || <span className="italic opacity-50">No overview available.</span>}</p>
+            {episodeData?.overview && <p className="text-[0.9rem] text-gray-300 leading-relaxed line-clamp-4">{episodeData.overview}</p>}
          </div>
       </div>
 
@@ -282,9 +282,11 @@ export default function StreamEpisodesSection({ showId, showTitle, numberOfSeaso
                 )}
               </div>
 
-              <p className="text-white/80 leading-relaxed text-[0.95rem] mt-1">
-                {episodeData?.overview || <span className="italic text-white/40">No overview available.</span>}
-              </p>
+              {episodeData?.overview && (
+                <p className="text-white/80 leading-relaxed text-[0.95rem] mt-1">
+                  {episodeData.overview}
+                </p>
+              )}
             </div>
 
             <div className="flex flex-col gap-6 md:w-[35%] pt-1">

@@ -51,7 +51,7 @@ function CollectionPage() {
         />
       )}
 
-      <div className="relative z-10 max-w-[1200px] mx-auto px-[5%] pt-[140px] pb-[80px] flex flex-col gap-[48px]">
+      <div className="relative z-10 max-w-[1200px] mx-auto px-[5%] pt-[140px] pb-[80px] flex flex-col gap-[20px]">
         {/* Header */}
         <div className="flex flex-col md:flex-row gap-10 items-start md:items-end">
           {collection.poster_path && (
@@ -69,12 +69,18 @@ function CollectionPage() {
               {collection.name}
             </h1>
             <div className="flex items-center gap-3 text-gray-400 text-[0.9rem]">
-              <span>{collection.parts?.length} Films</span>
-              <span className="text-gray-600">·</span>
-              <span>
-                {collection.parts?.[0]?.release_date?.split("-")[0]} –{" "}
-                {collection.parts?.at(-1)?.release_date?.split("-")[0]}
-              </span>
+              {[
+                collection.parts?.length > 0 && <span key="count">{collection.parts.length} Films</span>,
+                collection.parts?.[0]?.release_date && collection.parts?.at(-1)?.release_date && (
+                  <span key="years">
+                    {collection.parts[0].release_date.split("-")[0]} – {collection.parts.at(-1).release_date.split("-")[0]}
+                  </span>
+                )
+              ].filter(Boolean).reduce((prev, curr, i) => [
+                prev,
+                <span key={`sep-${i}`} className="text-gray-600">·</span>,
+                curr
+              ])}
             </div>
             {collection.overview && (
               <p className="text-gray-300 leading-relaxed text-[1rem] max-w-[700px]">
@@ -89,23 +95,12 @@ function CollectionPage() {
 
         {/* Movies grid */}
         <div>
-          <h2 className="text-[1.8rem] font-bold mb-8 text-white border-l-4 border-[#00c3ff] pl-[15px]">
+          <h2 className="text-[1.2rem] lg:text-[1.8rem] font-bold mb-8 text-white border-l-4 border-[#00c3ff] pl-[15px]">
             All Movies in the Collection
           </h2>
-          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
             {collection.parts.map((movie) => (
-              <div key={movie.id} className="flex flex-col gap-3">
-                <MovieCard movie={{ ...movie, media_type: "movie" }} layout="vertical" />
-                {/* Rating overlay info below card */}
-                {movie.vote_average > 0 && (
-                  <div className="flex items-center gap-1 px-1">
-                    <FaStar size={11} className="text-[#ffd700]" />
-                    <span className="text-[0.75rem] text-gray-400">
-                      {movie.vote_average.toFixed(1)}
-                    </span>
-                  </div>
-                )}
-              </div>
+              <MovieCard key={movie.id} movie={{ ...movie, media_type: "movie" }} layout="grid" />
             ))}
           </div>
         </div>

@@ -80,12 +80,10 @@ function EpisodeRow({ ep }) {
       {/* Expanded */}
       {expanded && (
         <div className="px-4 pb-4 flex flex-col gap-3 border-t border-white/5">
-          {ep.overview ? (
+          {ep.overview && (
             <p className="text-gray-400 text-[0.85rem] leading-relaxed pt-3">
               {ep.overview}
             </p>
-          ) : (
-            <p className="text-gray-600 text-[0.8rem] italic pt-3">No overview available.</p>
           )}
 
           {/* Guest Stars */}

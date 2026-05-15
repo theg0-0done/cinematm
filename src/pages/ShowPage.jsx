@@ -12,11 +12,11 @@ import { useState, useEffect, useContext, useRef } from "react";
 import { CinemaContext } from "../context/CinemaContext";
 
 const SectionTitle = ({ children }) => (
-  <h2 className="text-[1.8rem] font-bold mb-[20px] text-white border-l-4 border-[#00c3ff] pl-[15px]">{children}</h2>
+  <h2 className="text-[1.2rem] lg:text-[1.8rem] font-bold mb-[20px] text-white border-l-4 border-[#00c3ff] pl-[15px]">{children}</h2>
 );
 
 function formatStatValue(n) {
-  if (n === null || n === undefined || n === 0 || n === "") return "N/A";
+  if (n === null || n === undefined || n === 0 || n === "") return null;
   if (typeof n === "number") {
     if (n >= 1e6) return +(n / 1e6).toFixed(1) + "M";
     if (n >= 1e3) return +(n / 1e3).toFixed(1) + "K";
@@ -75,7 +75,7 @@ function ShowPage() {
 
   const showLangName = new Intl.DisplayNames(["en"], { type: "language" }).of(showData.original_language);
   const showCountry  = showData.origin_country?.length
-    ? showData.origin_country.map(c => new Intl.DisplayNames(["en"], { type: "region" }).of(c)) : ["Unknown"];
+    ? showData.origin_country.map(c => new Intl.DisplayNames(["en"], { type: "region" }).of(c)) : [];
 
   const trailerVideo = showData.videos?.results?.find(v => v.type.toLowerCase() === "trailer");
   const trailerKey   = trailerVideo?.key || showData.videos?.results?.[0]?.key;
@@ -94,11 +94,11 @@ function ShowPage() {
   const epRuntime      = showData.episode_run_time?.[0] || null;
   const primaryNetwork = showData.networks?.[0] || null;
   const showStats = [
-    { label: "Country", value: showCountry[0] || "N/A", mobile: false },
+    { label: "Country", value: showCountry[0] || null, mobile: false },
     { label: "Seasons", value: formatStatValue(showData.number_of_seasons), mobile: true },
     { label: "Episodes", value: formatStatValue(showData.number_of_episodes), mobile: true },
-    { label: "Premiered", value: showData.first_air_date ? showData.first_air_date.split("-")[0] : "N/A", mobile: true },
-  ];
+    { label: "Premiered", value: showData.first_air_date ? showData.first_air_date.split("-")[0] : null, mobile: true },
+  ].filter(s => s.value !== null);
 
   return (
     <section className="relative min-h-screen w-full bg-transparent text-white pt-[80px] overflow-x-hidden">
@@ -121,11 +121,19 @@ function ShowPage() {
               : <h1 className="text-[2.2rem] font-extrabold leading-[1.1] text-white drop-shadow-lg">{showData.name}</h1>
             }
             <div className="flex items-center justify-center gap-2 text-[0.85rem] text-gray-300 font-medium">
-              <span className="text-[#ffd700] flex items-center gap-1"><FaStar size={12}/> {showData.vote_average?.toFixed(1)}</span>
-              <span className="text-gray-500">•</span>
-              <span>{showData.first_air_date?.split("-")[0]}</span>
-              <span className="text-gray-500">•</span>
-              <span>{showData.number_of_seasons} Seasons</span>
+              {[
+                showData.vote_average > 0 && (
+                  <span key="rating" className="text-[#ffd700] flex items-center gap-1">
+                    <FaStar size={12}/> {showData.vote_average.toFixed(1)}
+                  </span>
+                ),
+                showData.first_air_date && <span key="year">{showData.first_air_date.split("-")[0]}</span>,
+                showData.number_of_seasons > 0 && <span key="seasons">{showData.number_of_seasons} Seasons</span>
+              ].filter(Boolean).reduce((prev, curr, i) => [
+                prev,
+                <span key={`sep-${i}`} className="text-gray-500">•</span>,
+                curr
+              ])}
             </div>
             <div className="flex w-full overflow-x-auto justify-center gap-2 mt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {showData.genres?.map(g => <span key={g.id} className="text-[0.7rem] px-3 py-[4px] bg-white/10 border border-white/10 rounded-full text-gray-300 tracking-wider uppercase font-semibold shrink-0">{g.name}</span>)}
@@ -147,7 +155,7 @@ function ShowPage() {
 
           {showData.aggregate_credits?.cast?.length > 0 && (
             <div className="mt-4">
-              <h3 className="text-[1rem] font-bold mb-4 uppercase tracking-[0.15em] text-gray-400">Cast</h3>
+              <SectionTitle>Cast</SectionTitle>
               <div className="flex gap-2 overflow-x-auto pb-4 [scrollbar-width:none]">
                 {showData.aggregate_credits.cast.filter(c => c.known_for_department === "Acting").slice(0,10).map(actor => actor.profile_path && (
                   <Link key={actor.id} to={`/actor/${actor.id}`} className="flex flex-col gap-2 shrink-0 w-[92px] no-underline">
@@ -162,7 +170,7 @@ function ShowPage() {
 
           {showData.images?.backdrops?.length > 0 && (
             <div className="mt-2">
-              <h3 className="text-[1rem] font-bold mb-4 uppercase tracking-[0.15em] text-gray-400">Gallery</h3>
+              <SectionTitle>Gallery</SectionTitle>
               <div className="grid grid-cols-2 gap-2">
                 {showData.images.backdrops.slice(0, 3).map((img, i) => (
                   <img key={i} src={`https://image.tmdb.org/t/p/w500${img.file_path}`} className={`w-full h-full object-cover rounded-xl border border-white/5 shadow-md ${i===0 ? "col-span-2 aspect-video" : "aspect-[4/3]"}`}/>
@@ -173,7 +181,7 @@ function ShowPage() {
 
           {showData.similar?.results?.length > 0 && (
              <div className="mt-6">
-                <h3 className="text-[1rem] font-bold mb-4 uppercase tracking-[0.15em] text-gray-400">Similar Shows</h3>
+                <SectionTitle>Similar Shows</SectionTitle>
                 <div className="flex gap-4 overflow-x-auto pb-4 [scrollbar-width:none]">
                   {showData.similar.results.slice(0, 10).map(m => m.poster_path && (
                     <div key={m.id} className="w-[130px] shrink-0">
@@ -186,7 +194,7 @@ function ShowPage() {
 
           {showData.recommendations?.results?.length > 0 && (
              <div className="mt-4 mb-8">
-                <h3 className="text-[1rem] font-bold mb-4 uppercase tracking-[0.15em] text-gray-400">Recommended For You</h3>
+                <SectionTitle>Recommended For You</SectionTitle>
                 <div className="flex gap-4 overflow-x-auto pb-4 [scrollbar-width:none]">
                   {showData.recommendations.results.slice(0, 10).map(m => m.poster_path && (
                     <div key={m.id} className="w-[130px] shrink-0">
@@ -207,17 +215,26 @@ function ShowPage() {
             ? <img src={`https://image.tmdb.org/t/p/w500${showLogo}`} alt={showData.name} className="max-w-[80%] md:max-w-[450px] max-h-[180px] object-contain drop-shadow-[0_0_30px_rgba(0,0,0,0.5)] mb-2"/>
             : <h1 className="text-[3.5rem] md:text-[2.5rem] font-extrabold m-0 leading-[1.1] text-white drop-shadow-lg">{showData.name}</h1>}
           {showData.tagline && <p className="text-gray-400 italic text-[1rem] m-0">"{showData.tagline}"</p>}
-          <div className="flex items-center gap-[10px] text-[#ffd700] text-[1.1rem] font-bold">
-            <FaStar/> {showData.vote_average.toFixed(1)}/10
-            <span className="text-gray-500 text-[0.85rem] font-normal">({showData.vote_count?.toLocaleString()} votes)</span>
-          </div>
+          {showData.vote_average > 0 && (
+            <div className="flex items-center gap-[10px] text-[#ffd700] text-[1.1rem] font-bold">
+              <FaStar/> {showData.vote_average.toFixed(1)}/10
+              <span className="text-gray-500 text-[0.85rem] font-normal">({showData.vote_count?.toLocaleString()} votes)</span>
+            </div>
+          )}
           <div className="flex flex-wrap justify-center items-center gap-[10px] text-gray-300 text-[0.9rem]">
-            {showData.first_air_date && <span>{showData.first_air_date.split("-")[0]} – {showData.last_air_date?.split("-")[0] || "Present"}</span>}
-            <span className="text-gray-600">•</span>
-            <span>{showLangName}</span>
-            <span className="text-gray-600">•</span>
-            {/* Colored status badge */}
-            <span className={`px-[10px] py-[2px] rounded-full border text-[0.8rem] font-semibold ${statusStyle}`}>{showData.status}</span>
+            {[
+              showData.first_air_date && <span key="year">{showData.first_air_date.split("-")[0]} – {showData.last_air_date?.split("-")[0] || "Present"}</span>,
+              showLangName && <span key="lang">{showLangName}</span>,
+              showData.status && (
+                <span key="status" className={`px-[10px] py-[2px] rounded-full border text-[0.8rem] font-semibold ${statusStyle}`}>
+                  {showData.status}
+                </span>
+              )
+            ].filter(Boolean).reduce((prev, curr, i) => [
+              prev,
+              <span key={`sep-${i}`} className="text-gray-600">•</span>,
+              curr
+            ])}
           </div>
         </div>
         <div className="w-full h-[1px] bg-white/10"/>

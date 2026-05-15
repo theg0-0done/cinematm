@@ -202,7 +202,7 @@ function Movies() {
     if (category === "trending-lately")    return `Trending ${mediaType}`;
     if (category === "top-rated")          return `Top Rated ${mediaType}`;
     if (category)                          return category.replace(/-/g, " ");
-    return mediaType;
+    return mediaType === "movies" ? "Movies" : mediaType === "tv-shows" ? "TV Shows" : mediaType;
   };
 
   const renderCard = (el, index) => <MovieCard key={el.id || index} movie={el} layout="grid" showRemove={mediaType === "watchlist"} />;
@@ -213,8 +213,8 @@ function Movies() {
     <section className="pt-[100px] px-[10px] pb-[60px] md:pt-[90px] md:px-[20px] md:pb-[40px] min-h-screen bg-transparent text-white">
       <div className="max-w-[1400px] mx-auto w-full">
         {mediaType !== "watchlist" && (
-          <div className="flex flex-col items-center gap-[20px] mb-[40px]">
-            <h2 className="text-[2.5rem] font-extrabold m-0 text-white capitalize text-center drop-shadow-md">
+          <div className="flex flex-col items-start gap-[20px] mb-[40px]">
+            <h2 className="text-[1.2rem] lg:text-[1.8rem] font-bold m-0 text-white capitalize text-left border-l-4 border-[#00c3ff] pl-[15px]">
               {displayTitle()}
             </h2>
 
@@ -229,10 +229,10 @@ function Movies() {
             )}
 
             {!category && (
-              <div className="flex flex-wrap justify-center items-center gap-[10px] w-full max-w-[960px] p-[12px] shadow-lg">
+              <div className="flex flex-col md:flex-row justify-center items-center gap-[10px] w-full max-w-[960px] p-[12px] shadow-lg">
                 {/* Search */}
                 <form
-                  className="flex items-center bg-black/40 border border-white/10 rounded-full px-[15px] h-[40px] flex-1 min-w-[180px] transition-all duration-300 focus-within:shadow-[0_0_10px_rgba(0,195,255,0.3)] focus-within:border-[#00c3ff]"
+                  className="flex items-center bg-black/40 w-full border border-white/10 rounded-full px-[15px] h-[40px] min-w-[180px] transition-all duration-300 focus-within:shadow-[0_0_10px_rgba(0,195,255,0.3)] focus-within:border-[#00c3ff]"
                   onSubmit={(e) => e.preventDefault()}
                 >
                   <input
@@ -252,32 +252,42 @@ function Movies() {
                 </form>
 
                 <div className="flex gap-2 w-full">
-                {/* Genre */}
-                <select className={`${selectCls} ${selectedGenre?.name ? "border-[#00c3ff] text-[#00c3ff]" : ""}`}
-                  value={selectedGenre?.name || ""}
-                  onChange={(e) => { const g = genres.find((x) => x.name === e.target.value); setSelectedGenre(g || null); setQuery(""); setSelectedLanguage(null); }}>
-                  <option value="" className="bg-[#1a1c22]">All Genres</option>
-                  {genres?.map((g) => <option key={g.id} value={g.name} className="bg-[#1a1c22]">{g.name}</option>)}
-                </select>
+                  {/* Genre */}
+                  <select className={`w-full ${selectCls} ${selectedGenre?.id ? "border-[#00c3ff] text-[#00c3ff]" : ""}`}
+                    value={selectedGenre?.id || ""}
+                    onChange={(e) => { 
+                      const id = Number(e.target.value);
+                      const g = genres.find((x) => x.id === id); 
+                      setSelectedGenre(g || null); 
+                      setQuery(""); 
+                      setSelectedLanguage(null); 
+                    }}>
+                    <option value="" className="bg-[#1a1c22]">All Genres</option>
+                    {genres?.map((g) => <option key={g.id} value={g.id} className="bg-[#1a1c22]">{g.name}</option>)}
+                  </select>
 
-                {/* Language */}
-                <select className={`${selectCls} ${selectedLanguage ? "border-[#00c3ff] text-[#00c3ff]" : ""}`}
-                  value={selectedLanguage || ""}
-                  onChange={(e) => { const langObj = languages.find((x) => x.english_name === e.target.value); setSelectedLanguage(langObj?.iso_639_1 ?? null); setQuery(""); setSelectedGenre(null); }}>
-                  <option value="" className="bg-[#1a1c22]">All Languages</option>
-                  {languages?.map((l) => <option key={l.english_name} value={l.english_name} className="bg-[#1a1c22]">{l.english_name}</option>)}
-                </select>
+                  {/* Language */}
+                  <select className={`w-full ${selectCls} ${selectedLanguage ? "border-[#00c3ff] text-[#00c3ff]" : ""}`}
+                    value={selectedLanguage || ""}
+                    onChange={(e) => { 
+                      setSelectedLanguage(e.target.value || null); 
+                      setQuery(""); 
+                      setSelectedGenre(null); 
+                    }}>
+                    <option value="" className="bg-[#1a1c22]">All Languages</option>
+                    {languages?.map((l) => <option key={l.iso_639_1} value={l.iso_639_1} className="bg-[#1a1c22]">{l.english_name}</option>)}
+                  </select>
 
+                  {/* Clear */}
+                  {hasActiveFilter && (
+                    <button
+                      onClick={clearFilters}
+                      className="flex items-center gap-[6px] p-[12px] aspect-square rounded-full text-[0.85rem] border border-[#00c3ff]/50 text-[#00c3ff] bg-[#00c3ff]/10 cursor-pointer transition-all hover:bg-[#00c3ff]/20"
+                    >
+                      <FaTimes size={12} />
+                    </button>
+                  )}
                 </div>
-                {/* Clear */}
-                {hasActiveFilter && (
-                  <button
-                    onClick={clearFilters}
-                    className="flex items-center gap-[6px] px-[15px] h-[40px] rounded-full text-[0.85rem] border border-[#00c3ff]/50 text-[#00c3ff] bg-[#00c3ff]/10 cursor-pointer transition-all hover:bg-[#00c3ff]/20"
-                  >
-                    <FaTimes size={12} /> Clear
-                  </button>
-                )}
               </div>
             )}
 
@@ -291,7 +301,7 @@ function Movies() {
         )}
 
         {mediaType === "watchlist" && (
-          <h2 className="text-[2.5rem] font-extrabold mb-[40px] text-white capitalize text-center drop-shadow-md">
+          <h2 className="text-[1.2rem] lg:text-[1.8rem] font-bold mb-[40px] text-white capitalize text-left border-l-4 border-[#00c3ff] pl-[15px]">
             {displayTitle()}
           </h2>
         )}

@@ -83,36 +83,22 @@ function MovieReview({ movie, onPrev, onNext }) {
         </h1>
 
         {/* Rating + Year row */}
-        <div className="flex items-center gap-3 mb-3 text-sm text-white">
-          {rating && (
-            <span className="flex items-center gap-1 font-semibold">
-              <FaStar className="text-[#ffd700]" size={13} />
-              {rating}
-            </span>
-          )}
-          •
-          {year && (
-            <span className=" text-sm font-medium">
-              {year}
-            </span>
-          )}
-          •
-          {movie.media_type === "tv" && (
-            <span className=" text-sm font-medium">
-              TV
-            </span>
-          )}
-          {movie.media_type === "movie" && (
-            <span className=" text-sm font-medium">
-              Movie
-            </span>
-          )}
-          •
-          {genreNames.length > 0 && (
-            <span key={genreNames[0]} className=" text-sm font-medium">
-              {genreNames[0]}
-            </span>
-          )}
+        <div className="flex items-center gap-2 mb-3 text-sm text-white/80">
+          {[
+            rating && (
+              <span key="rating" className="flex items-center gap-1 font-semibold text-white">
+                <FaStar className="text-[#ffd700]" size={13} />
+                {rating}
+              </span>
+            ),
+            year && <span key="year">{year}</span>,
+            movie.media_type && (
+              <span key="type" className="capitalize">
+                {movie.media_type === "tv" ? "TV Series" : "Movie"}
+              </span>
+            ),
+            genreNames.length > 0 && <span key="genre">{genreNames[0]}</span>
+          ].filter(Boolean).reduce((prev, curr, i) => i === 0 ? [curr] : [...prev, <span key={`sep-${i}`} className="opacity-40">•</span>, curr], [])}
         </div>
 
         {/* Overview */}
