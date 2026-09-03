@@ -201,7 +201,7 @@ function MoviePage() {
           {movieData.imdb_id && (
             <div className="mt-4">
               <div className="w-full aspect-video rounded-xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/10">
-                <iframe src={`https://vaplayer.ru/embed/movie/${movieData.imdb_id}?autoplay=0`} className="w-full h-full border-none" allowFullScreen sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-popups"/>
+                <iframe src={`https://vaplayer.ru/embed/movie/${movieData.imdb_id}?autoplay=0`} className="w-full h-full border-none" allowFullScreen/>
               </div>
             </div>
           )}
@@ -377,7 +377,6 @@ function MoviePage() {
                 title="Movie Stream"
                 className="w-full h-full border-none"
                 allowFullScreen
-                sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-popups"
               />
             </div>
           </div>

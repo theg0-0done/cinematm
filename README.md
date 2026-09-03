@@ -1,18 +1,50 @@
-# React + Vite
+# CinemaTM
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern web application for discovering and streaming movies and TV shows, built with React and Vite.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Discover Content**: Browse popular, top-rated, and trending movies and TV shows.
+- **Search**: Search for specific titles across movies and TV series.
+- **Details**: View comprehensive details about titles including cast, crew, ratings, and overviews.
+- **Streaming**: Stream available movies and TV episodes directly within the application.
+- **Responsive Design**: Optimized for both desktop and mobile viewing experiences.
 
-## React Compiler
+## Technologies Used
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- React (with Hooks and React Router)
+- Vite for fast development and building
+- Tailwind CSS for styling
+- TMDB API for movie/TV show metadata
 
-Note: This will impact Vite dev & build performances.
+## Getting Started
 
-## Expanding the ESLint configuration
+### Prerequisites
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Node.js (v18 or higher recommended)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository
+   ```bash
+   git clone https://github.com/theg0-0done/cinematm.git
+   ```
+
+2. Install dependencies
+   ```bash
+   npm install
+   ```
+
+3. Run the development server
+   ```bash
+   npm run dev
+   ```
+
+## Development
+
+The app uses React 18+ and is bundled using Vite for optimal developer experience. HMR is enabled by default.
+
+## License
+
+This project is licensed under the MIT License.

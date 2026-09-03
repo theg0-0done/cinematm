@@ -107,7 +107,7 @@ export default function StreamEpisodesSection({ showId, showTitle, numberOfSeaso
          {/* Stream Player */}
          <div ref={playerRef} className="relative w-full aspect-video rounded-[12px] overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/10 mt-2">
             {imdbId ? (
-               <iframe key={`mobile-${showId}-${selectedSeason}-${selectedEpisode}`} src={`https://vaplayer.ru/embed/tv/${imdbId}/${selectedSeason}/${selectedEpisode}?autoplay=0`} className="w-full h-full border-none" allowFullScreen sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-popups"/>
+               <iframe key={`mobile-${showId}-${selectedSeason}-${selectedEpisode}`} src={`https://vaplayer.ru/embed/tv/${imdbId}/${selectedSeason}/${selectedEpisode}?autoplay=0`} className="w-full h-full border-none" allowFullScreen/>
             ) : (
                <div className="w-full h-full bg-black/40 flex items-center justify-center text-white/50 text-[0.9rem]">Stream unavailable</div>
             )}
@@ -246,7 +246,6 @@ export default function StreamEpisodesSection({ showId, showTitle, numberOfSeaso
                   title={`Stream S${selectedSeason}E${selectedEpisode}`}
                   className="w-full h-full border-none" 
                   allowFullScreen
-                  sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-popups"
                 />
               </div>
             ) : (
